@@ -1,0 +1,14 @@
+#!/bin/bash -l
+
+#SBATCH --partition=gpu
+#SBATCH --nodes=1 --ntasks=24
+#SBATCH --mem=600G --gres=gpu:1 --time=1-0:00
+#SBATCH --job-name=ROBOKOPKG_baseline_edge_node_preprocess
+#SBATCH --output=/home/jchung/ROBOKOP/git/xDTD_training_pipeline/log_folder/preprocess_%j.out
+#SBATCH --mail-user=jchung@renci.org
+#SBATCH --mail-type=ALL
+
+export LD_LIBRARY_PATH=/home/jchung/miniconda3/lib:$LD_LIBRARY_PATH
+cd /home/jchung/ROBOKOP/git/xDTD_training_pipeline/scripts
+
+/home/jchung/miniconda3/envs/main_env/bin/python -u preprocess_data.py --graph_nodes /home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/rkg_embedding_input/filtered_graph_nodes_info.txt --graph_edges /home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/rkg_embedding_input/filtered_graph_edges.txt

@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+#SBATCH --partition=gpu
+#SBATCH --nodes=1 --ntasks=24
+#SBATCH --mem=660G --gres=gpu:1 --time=10-0:00
+#SBATCH --job-name=ROBOKOPKG_baseline_graphsage_run
+#SBATCH --output=/home/jchung/ROBOKOP/git/xDTD_training_pipeline/log_folder/RKG_baseline_run_graphsage_py2.7.out
+#SBATCH --mail-user=jchung@renci.org
+#SBATCH --mail-type=ALL
+
+cd /home/jchung/ROBOKOP/git/xDTD_training_pipeline
+
+/home/jchung/miniconda3/envs/graphsage_p2.7env/bin/python -u -m graphsage.unsupervised_train --gpu 0 --train_prefix "/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/graphsage_input/data" --model_size "big" --learning_rate 0.001 --samples_1 25 --samples_2 25 --dim_1 128 --dim_2 128 --model "graphsage_mean" --max_total_steps 1000000 --validate_iter 10000 --batch_size 10000 --max_degree 25

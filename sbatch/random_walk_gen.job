@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+#SBATCH --partition=gpu
+#SBATCH --nodes=1 --ntasks=24
+#SBATCH --mem=160G --gres=gpu:1 --time=1-0:00
+#SBATCH --job-name=ROBOKOPKG_baseline_random_walk_gen
+#SBATCH --output=/home/jchung/ROBOKOP/git/xDTD_training_pipeline/log_folder/RKG_baseline_random_walk_gen.out
+#SBATCH --mail-user=jchung@renci.org
+#SBATCH --mail-type=ALL
+
+cd /home/jchung/ROBOKOP/git/xDTD_training_pipeline
+
+/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/generate_random_walk.py --Gjson /home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/graphsage_input/data-G.json

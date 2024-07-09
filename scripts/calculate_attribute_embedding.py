@@ -1,13 +1,13 @@
 ## Import Standard Packages
 import sys, os
 import argparse
-import json
-import time
-import pickle
-from transformers import AutoModel, AutoTokenizer
-import torch
-import numpy as np
-from sklearn.decomposition import PCA
+#import json
+#import time
+#import pickle
+#from transformers import AutoModel, AutoTokenizer
+#import torch
+#import numpy as np
+#from sklearn.decomposition import PCA
 
 ## Import Personal Packages
 pathlist = os.getcwd().split(os.path.sep)
@@ -16,6 +16,16 @@ ROOTPath = os.path.sep.join([*pathlist[:(ROOTindex + 1)]])
 sys.path.append(os.path.join(ROOTPath, 'scripts'))
 import utils
 
+## Import Standard Packages
+import sys, os
+import argparse
+import json
+import time
+import pickle
+from transformers import AutoModel, AutoTokenizer
+import torch
+import numpy as np
+from sklearn.decomposition import PCA
 
 def get_bert_embedding(texts, tokenizer, model, device):
     inputs = tokenizer(texts, padding=True, truncation=True, return_tensors="pt", max_length=512)
@@ -66,7 +76,6 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, help="Batch size of bert embedding calculation", default=10)
     parser.add_argument("--output_folder", type=str, help="The path of output folder", default=os.path.join(ROOTPath, "data"))
     args = parser.parse_args()
-
     logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
     args.logger = logger
     logger.info(args)

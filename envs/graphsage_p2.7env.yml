@@ -8,4 +8,4 @@ dependencies:
   - numpy=1.16.6
   - pip
   - tensorboard=1.8.0
-  - tensorflow=1.8.0
+  - tensorflow-gpu=1.8.0

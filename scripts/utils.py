@@ -2,6 +2,7 @@ import numpy as np
 import os, sys
 import logging
 import logging.handlers
+import graph_tool.all as gt
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
@@ -14,15 +15,15 @@ import re
 from tqdm import tqdm
 import pickle
 import joblib
-import graph_tool.all as gt
+# import graph_tool.all as gt
 # from bmt import Toolkit
 from biolink_helper import BiolinkHelper
 from neo4j import GraphDatabase
 from sklearn.metrics import f1_score
 from models import Transition
 plt.switch_backend('agg')
-from node_synonymizer import NodeSynonymizer
-nodesynonymizer = NodeSynonymizer()
+#from node_synonymizer import NodeSynonymizer
+#nodesynonymizer = NodeSynonymizer()
 
 SELF_LOOP_RELATION = 'SELF_LOOP_RELATION'
 DUMMY_RELATION = 'DUMMY_RELATION'

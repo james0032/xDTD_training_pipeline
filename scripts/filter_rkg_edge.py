@@ -19,7 +19,8 @@ df_edges = []
 with open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/rkg_embedding_input/train_edges.jsonl", "r") as edgef:
     for i,l in enumerate(tqdm(edgef)):
         j = json.loads(l)
-        df_edges.append(format_edge(j))
+        if j['predicate']!='biolink:subclass_of':
+            df_edges.append(format_edge(j))
             
 df_edges = pd.DataFrame(df_edges) 
 df_edges.to_csv("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/rkg_embedding_input/filtered_graph_edges.txt", sep='\t', index=False)            

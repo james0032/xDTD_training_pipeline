@@ -56,7 +56,7 @@ class bltools():
                 self.cat_sets.add(str(cat_set))
                 #print(cat_set)
             c+=1
-        select_cat = list(cat_set)[-1]
+        select_cat = sorted(list(cat_set))[0]
         # {"{'biolink:Protein', 'biolink:ChemicalEntity'}", 
         # "{'biolink:Drug', 'biolink:SmallMolecule'}", 
         # "{'biolink:MolecularMixture', 'biolink:SmallMolecule'}", 

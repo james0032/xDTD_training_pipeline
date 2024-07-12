@@ -16,12 +16,15 @@ def format_edge(j):
 
 #with open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/rkg_embedding_input/filtered_graph_edges.txt", "w") as newedgef:        
 df_edges = []
+c =0
 with open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/rkg_embedding_input/train_edges.jsonl", "r") as edgef:
     for i,l in enumerate(tqdm(edgef)):
         j = json.loads(l)
         if j['predicate']!='biolink:subclass_of':
             df_edges.append(format_edge(j))
-            
+        else:
+            c+=1
+print(f"{c} subclass_of edges removed.")
 df_edges = pd.DataFrame(df_edges) 
-df_edges.to_csv("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/rkg_embedding_input/filtered_graph_edges.txt", sep='\t', index=False)            
+df_edges.to_csv("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/filtered_graph_edges.txt", sep='\t', index=False)            
             

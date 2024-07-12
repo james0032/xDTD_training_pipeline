@@ -80,19 +80,30 @@ class bltools():
             }
         return dic, c
 
+print("Get connected edge ids.")
+df_edges = pd.read_csv("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/filtered_graph_edges.txt", sep="\t", header=0)
+sset = set(df_edges['source'])
+tset = set(df_edges['target'])
+edge_set = sset.union(tset)
 blt = bltools()
 
-c = 0
+
 df_nodes = []
-#with open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/raw_graph/nodes.jsonl", "r") as nodef:
-with open("/Users/jchung/Documents/DOCKER/miniAIxB/Embeddings/data/nodes.jsonl", "r") as nodef:
+orphanf = open("/Users/jchung/Documents/DOCKER/miniAIxB/Embeddings/data/orphan_nodes.jsonl", "w")
+with open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/nodes.jsonl", "r") as nodef:
+#with open("/Users/jchung/Documents/DOCKER/miniAIxB/Embeddings/data/nodes.jsonl", "r") as nodef:
     for i, l in enumerate(tqdm(nodef)):
         j = json.loads(l)
-        dic, c =  blt.format_node(j, c)
-        df_nodes.append(dic)
-        #if c > 100:
-        #    break
-print(f"counter is {c}")
+        if j['id'] in edge_set:
+            dic, c =  blt.format_node(j, c)
+            df_nodes.append(dic)
+            
+        else:
+            orphanf.write(l)
+
+
 print(blt.cat_sets)       
-#df_nodes = pd.DataFrame(df_nodes)
-#df_nodes.to_csv("/Users/jchung/Documents/DOCKER/miniAIxB/Embeddings/data/rkg_embedding_input/test_filtered_graph_nodes_info.txt", sep='\t', index=False)    
+df_nodes = pd.DataFrame(df_nodes)
+df_nodes.to_csv("/Users/jchung/Documents/DOCKER/miniAIxB/Embeddings/data/filtered_graph_nodes_info.txt", sep='\t', index=False)    
+
+orphanf.close()

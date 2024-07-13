@@ -2,11 +2,11 @@ import json
 import tqdm
 import os
 
-with open("/home/Embeddings/data/drug_disease/disease_ids.json", "r", encoding='utf-8-sig') as disf:
+with open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/drug_disease/disease_ids.json", "r", encoding='utf-8-sig') as disf:
     disj = json.load(disf)
     disj = disj[0]
     disset = set(disj['disease_ids'])
-with open("/home/Embeddings/data/drug_disease/drug_ids.json", "r", encoding='utf-8-sig') as drugf:
+with open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/drug_disease/drug_ids.json", "r", encoding='utf-8-sig') as drugf:
     drugj = json.load(drugf)
     drugset= set(drugj['drug_ids'])
 

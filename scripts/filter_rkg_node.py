@@ -89,7 +89,7 @@ blt = bltools()
 
 
 df_nodes = []
-orphanf = open("/Users/jchung/Documents/DOCKER/miniAIxB/Embeddings/data/orphan_nodes.jsonl", "w")
+orphanf = open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/orphan_nodes.jsonl", "w")
 with open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/nodes.jsonl", "r") as nodef:
 #with open("/Users/jchung/Documents/DOCKER/miniAIxB/Embeddings/data/nodes.jsonl", "r") as nodef:
     for i, l in enumerate(tqdm(nodef)):
@@ -104,6 +104,6 @@ with open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/nodes.jsonl", "r
 
 print(blt.cat_sets)       
 df_nodes = pd.DataFrame(df_nodes)
-df_nodes.to_csv("/Users/jchung/Documents/DOCKER/miniAIxB/Embeddings/data/filtered_graph_nodes_info.txt", sep='\t', index=False)    
+df_nodes.to_csv("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/filtered_graph_nodes_info.txt", sep='\t', index=False)    
 
 orphanf.close()

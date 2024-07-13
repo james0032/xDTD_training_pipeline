@@ -87,7 +87,7 @@ tset = set(df_edges['target'])
 edge_set = sset.union(tset)
 blt = bltools()
 
-
+c=0
 df_nodes = []
 orphanf = open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/orphan_nodes.jsonl", "w")
 with open("/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/nodes.jsonl", "r") as nodef:

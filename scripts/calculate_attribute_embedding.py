@@ -69,7 +69,7 @@ if __name__ == "__main__":
     parser.add_argument("--log_dir", type=str, help="The path of logfile folder", default=os.path.join(ROOTPath, "log_folder"))
     parser.add_argument("--log_name", type=str, help="log file name", default="calculate_attribute_embedding.log")
     parser.add_argument('--gpu', type=int, help='gpu device (default: 0)', default=0)
-    parser.add_argument("--use_gpu", action="store_true", help="Whether use GPU or not", default=False)
+    parser.add_argument("--use_gpu", dest="use_gpu", default=False, action="store_true", help="Whether use GPU or not")
     parser.add_argument('--node_info', type=str, help='Path to a file containing node information', default=os.path.join(ROOTPath, "data", "filtered_graph_nodes_info.txt"))
     parser.add_argument('--seed', type=int, help='Random seed (default: 1023)', default=1023)
     parser.add_argument('--pca_components', type=int, help='Number of components for PCA', default=100)
@@ -101,6 +101,7 @@ if __name__ == "__main__":
         device = torch.device(f'cuda:{args.gpu}')
         torch.cuda.reset_peak_memory_stats()
         torch.cuda.set_device(args.gpu)
+        print("GPU ready.")
     elif args.use_gpu:
         print('No GPU is detected in this computer. Use CPU instead.')
         use_gpu = False

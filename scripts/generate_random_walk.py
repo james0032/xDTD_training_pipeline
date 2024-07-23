@@ -58,7 +58,7 @@ if __name__ == "__main__":
     parser.add_argument("--log_dir", type=str, help="The path of logfile folder", default=os.path.join(ROOTPath, "log_folder"))
     parser.add_argument("--log_name", type=str, help="log file name", default="generate_random_walk.log")
     parser.add_argument("--Gjson", type=str, help="The path of G.json file")
-    parser.add_argument("--walk_length", type=int, help="Random walk length", default=30)
+    parser.add_argument("--walk_length", type=int, help="Random walk length", default=5)
     parser.add_argument("--number_of_walks", type=int, help="Number of random walks per node", default=10)
     parser.add_argument("--batch_size", type=int, help="Size of batch for each run", default=200000)
     # parser.add_argument("--process", type=int, help="Number of processes to be used", default=-1)
@@ -92,13 +92,13 @@ if __name__ == "__main__":
     logger.info(f'The number of nodes in training graph: {len(G.nodes)}')
 
     logger.info(f'total batch: {len(batch)-1}')
-
+    logger.info(f'number of walks:{args.number_of_walks}, walk length={args.walk_length}')
     for i in range(len(batch)):
         if((i+1)<len(batch)):
             logger.info(f'Here is batch{i+1}')
             start = batch[i]
             end = batch[i+1]
-            indexes = walker.random_walks(G, n_walks=10, walk_len=30, start_nodes=range(start, end))
+            indexes = walker.random_walks(G, n_walks=args.number_of_walks, walk_len=args.walk_length, start_nodes=range(start, end))
             walk_result = np.array(G_nodes)[indexes]
             out_res = convert_array_to_pair_list(walk_result)
             

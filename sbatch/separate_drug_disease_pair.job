@@ -1,0 +1,17 @@
+#!/bin/bash -l
+
+#SBATCH --partition=gpu
+#SBATCH --nodes=1 --ntasks=24
+#SBATCH --mem=600G --gres=gpu:1 --time=10-0:00
+#SBATCH --job-name=ROBOKOPKG_baseline_edge_node_preprocess
+#SBATCH --output=/home/jchung/ROBOKOP/git/xDTD_training_pipeline/log_folder/separate_%j.out
+#SBATCH --mail-user=jchung@renci.org
+#SBATCH --mail-type=ALL
+
+export LD_LIBRARY_PATH=/home/jchung/miniconda3/lib:$LD_LIBRARY_PATH
+cd /home/jchung/ROBOKOP/git/xDTD_training_pipeline
+
+ln -s /projects/stars/Data_services/biolink3/graphs/Baseline/c22e87c3316bb5f4/nodes.jsonl nodes.jsonl
+ln -s /projects/stars/Data_services/biolink3/graphs/Baseline/c22e87c3316bb5f4/edges.jsonl edges.jsonl
+
+/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/separate_drug_disease_pair.py

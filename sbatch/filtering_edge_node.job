@@ -1,0 +1,15 @@
+#!/bin/bash -l
+
+#SBATCH --partition=gpu
+#SBATCH --nodes=1 --ntasks=24
+#SBATCH --mem=320G --gres=gpu:1 --time=10-0:00
+#SBATCH --job-name=ROBOKOPKG_baseline_graph_filtering_subclass_of_removing
+#SBATCH --output=/home/jchung/ROBOKOP/git/xDTD_training_pipeline/log_folder/filtering_edges_nodes_%j.out
+#SBATCH --mail-user=jchung@renci.org
+#SBATCH --mail-type=ALL
+
+cd /home/jchung/ROBOKOP/git/xDTD_training_pipeline
+
+#/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/filter_rkg_edge.py
+/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/filter_rkg_node.py
+

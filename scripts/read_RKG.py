@@ -163,8 +163,8 @@ def keep_CCGDD(edge, typemap):
     # return True if you want to filter this edge out
     # We want to keep edges between chemicals and genes, between genes and disease, and between chemicals and diseases
     # Unfortunately this means that we need a type map... Dangit
-    if edge["predicate"] == "biolink:subclass_of":
-        return True
+    #if edge["predicate"] == "biolink:subclass_of":
+    #    return True
     accepted = [ ("biolink:ChemicalEntity", "biolink:DiseaseOrPhenotypicFeature"),
                 ("biolink:ChemicalEntity", "biolink:ChemicalEntity"),
                 ("biolink:ChemicalEntity", "biolink:Gene"),
@@ -176,12 +176,26 @@ def keep_CGGD(edge, typemap):
     # return True if you want to filter this edge out
     # We want to keep edges between chemicals and genes, between genes and disease, and between chemicals and diseases
     # Unfortunately this means that we need a type map... Dangit
-    if edge["predicate"] == "biolink:subclass_of":
-        return True
+    #if edge["predicate"] == "biolink:subclass_of":
+    #    return True
     accepted = [ ("biolink:ChemicalEntity", "biolink:DiseaseOrPhenotypicFeature"),
                 ("biolink:ChemicalEntity", "biolink:Gene"),
                 ("biolink:Gene", "biolink:Gene"),
                 ("biolink:Gene", "biolink:DiseaseOrPhenotypicFeature")]
+    return check_accepted(edge, typemap, accepted)
+
+def keep_CCGGDD(edge, typemap):
+    # return True if you want to filter this edge out
+    # We want to keep edges between chemicals and genes, between genes and disease, and between chemicals and diseases
+    # Unfortunately this means that we need a type map... Dangit
+    #if edge["predicate"] == "biolink:subclass_of":
+    #    return True
+    accepted = [ ("biolink:ChemicalEntity", "biolink:DiseaseOrPhenotypicFeature"),
+                ("biolink:ChemicalEntity", "biolink:ChemicalEntity"),
+                ("biolink:ChemicalEntity", "biolink:Gene"),
+                ("biolink:Gene", "biolink:Gene"),
+                ("biolink:Gene", "biolink:DiseaseOrPhenotypicFeature"),
+                ("biolink:DiseaseOrPhenotypicFeature", "biolink:DiseaseOrPhenotypicFeature"),]
     return check_accepted(edge, typemap, accepted)
 
 
@@ -330,9 +344,11 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
     
     if style == "rmsubclass":
         remove_edge = remove_subclass_and_cid
-        
-    if style == "nonredundant":
+    elif style == "nonredundant":
         remove_edge = all_keep
+    elif style == "keep_CCGGDD":
+        remove_edge = keep_CCGGDD
+        
     print(f"Edge file formatting using style {style}.")    
     df_edges = []
     c =0
@@ -400,6 +416,6 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
     
     
 if __name__ == "__main__":
-    create_start_graph(style="nonredundant")
+    create_start_graph(style="keep_CCGGDD")
     
     

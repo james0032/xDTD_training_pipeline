@@ -86,9 +86,11 @@ if __name__ == "__main__":
     nodeclass_data_index = id_to_type
     for curie, node_cls in nodeclass_data_index.items():
         temp = np.zeros(len(type2id)).tolist()
-        temp[type2id[node_cls]] = temp[type2id[node_cls]] + 1
-        nodeclass_data_index[curie] = [node_cls, temp]
-
+        try:
+            temp[type2id[node_cls]] = temp[type2id[node_cls]] + 1
+            nodeclass_data_index[curie] = [node_cls, temp]
+        except KeyError as e:
+            print(f"Keyerror message: {e}, node cls is {curie}, {node_cls}")
     ## index - 1 is to make sure there is no mismatch when we include the external intitial embedding
     logger.info("Generate id_map file")
     id_map = pd.DataFrame([(curie, index-1) for curie, index in entity2id.items()]).rename(columns={0: 'curie', 1: 'id'})

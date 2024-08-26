@@ -373,15 +373,18 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
     print(f"formatted edge file dump for embedding completed.\n{edge_format}")
     # Keep all nodes instead of removing orphan nodes; still has its own script section for adding filter back to orphan nodes instead of combine to the first node file read.
     print("node file formatting")
+    sset = set(df_edges['source'])
+    tset = set(df_edges['target'])
+    edge_set = sset.union(tset)
     blt = bltools()
     df_nodes = []
     with open(node_file, "r") as nodef:
     #with open("/Users/jchung/Documents/DOCKER/miniAIxB/Embeddings/data/nodes.jsonl", "r") as nodef:
         for i, l in enumerate(tqdm(nodef)):
             j = json.loads(l)
-            #if j['id'] in edge_set:
-            dic, c =  blt.format_node(j, c)
-            df_nodes.append(dic)
+            if j['id'] in edge_set:
+                dic, c =  blt.format_node(j, c)
+                df_nodes.append(dic)
 
             #else:
             #    orphanf.write(l)

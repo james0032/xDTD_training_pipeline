@@ -62,7 +62,10 @@ class EdgeMinibatchIterator(object):
     def _remove_isolated(self, edge_list):
         new_edge_list = []
         missing = 0
-        for (n1, n2) in edge_list:
+        for idx, value in enumerate(edge_list):
+            assert len(value) is 2
+            # can I write an assert message?
+            (n1, n2) = value
             if not n1 in self.G.node or not n2 in self.G.node:
                 missing += 1
                 continue

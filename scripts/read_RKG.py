@@ -14,10 +14,15 @@ BIOLINK_MODEL_SCHEMA_URL = f"https://raw.githubusercontent.com/biolink/biolink-m
 PREDICATE_MAP_URL = f"https://raw.githubusercontent.com/biolink/biolink-model/v{BIOLINK_MODEL_VERSION}/predicate_mapping.yaml"
 
 #RKG_ROOT_PATH = "/projects/stars/Data_services/biolink3/graphs/Baseline_Nonredundant/829d9347d0e98317"
-RKG_ROOT_PATH = "/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data"
+pathlist = os.getcwd().split(os.path.sep)
+ROOTindex = pathlist.index("xDTD_training_pipeline")
+ROOTPath = os.path.sep.join([*pathlist[:(ROOTindex + 1)]])
+RKG_ROOT_PATH = os.path.join(ROOTPath, "data")
 OUTDIR = os.path.join(RKG_ROOT_PATH,"Split")
 if not os.path.exists(OUTDIR):
     os.makedirs(OUTDIR)
+    
+print(RKG_ROOT_PATH)
 
 class bltools():
     def __init__(self):
@@ -419,6 +424,7 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
     
     
 if __name__ == "__main__":
+    
     parser = argparse.ArgumentParser()
     parser.add_argument("--style", type=str, help="How to select subset of knowledge graph", default="all_keep")
     args = parser.parse_args()

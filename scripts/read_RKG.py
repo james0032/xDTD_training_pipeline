@@ -259,7 +259,7 @@ def split_ddpair_dump(df, drug_ids, disease_ids, treat, contra, method="strict",
     if n_random: # create 500 random pairs to match RTX group did 
         print(f"Randomly generating {n_random*2} pairs for each drug-disease treat edge.")
         random_pairs = []
-        for drug in tqdm(dftp['subject']):
+        for drug in tqdm(set(dftp['subject'])):
             exists = []
             for disease in random.sample(disease_ids, 500):
                 this_pair = drug+disease
@@ -273,7 +273,7 @@ def split_ddpair_dump(df, drug_ids, disease_ids, treat, contra, method="strict",
                 })
             #if len(exists) >0:
             #    print(f"drug-disease pairs exist: {exists}")
-        for disease in tqdm(dftp['object']):
+        for disease in tqdm(set(dftp['object'])):
             exists = []
             for drug in random.sample(drug_ids, 500):
                 this_pair = drug+disease

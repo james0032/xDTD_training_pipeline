@@ -424,9 +424,9 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
     
     
 if __name__ == "__main__":
-    
+    print(RKG_ROOT_PATH)
     parser = argparse.ArgumentParser()
-    parser.add_argument("--style", type=str, help="How to select subset of knowledge graph", default="all_keep")
+    parser.add_argument("--style", type=str, help="How to select subset of knowledge graph", default="nonredundant")
     args = parser.parse_args()
     create_start_graph(style=args.style)
     

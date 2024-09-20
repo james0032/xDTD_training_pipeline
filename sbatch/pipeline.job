@@ -1,21 +1,23 @@
 #!/bin/bash -l
 
 #SBATCH --partition=gpu
-#SBATCH --nodelist=gpu-6-2
+#SBATCH --nodelist=gpu-6-1
 #SBATCH --nodes=1 --ntasks=24
-#SBATCH --mem=180G --gres=gpu:1 --time=10-0:00
+#SBATCH --mem=300G --gres=gpu:1 --time=10-0:00
 #SBATCH --job-name=ROBOKOPKG_baseline_edge_node_preprocess
-#SBATCH --output=/home/jchung/ROBOKOP/git/xDTD_training_pipeline/log_folder/pipeline_%j.out
+#SBATCH --output=/home/jchung/ROBOKOP/git/keep_all_repeat/xDTD_training_pipeline/log_folder/pipeline_%j.out
 #SBATCH --mail-user=jchung@renci.org
 #SBATCH --mail-type=ALL
 
 #export LD_LIBRARY_PATH=/home/jchung/miniconda3/lib:$LD_LIBRARY_PATH
-cd /home/jchung/ROBOKOP/git/xDTD_training_pipeline
+cd /home/jchung/ROBOKOP/git/keep_all_repeat/xDTD_training_pipeline
 
 /home/jchung/miniconda3/envs/main_env/bin/python -u scripts/read_RKG.py
-#/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/preprocess_data.py --graph_nodes /home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/filtered_graph_nodes_info.txt --graph_edges /home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/filtered_graph_edges.txt
-#/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/calculate_attribute_embedding.py --batch_size 100 --node_info data/filtered_graph_nodes_info.txt
-#/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/graphsage_data_generation.py --validation_percent 0.2 --emb_file /home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/text_embedding/embedding_biobert_namecat.pkl
-#/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/generate_random_walk.py --Gjson /home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/graphsage_input/data-G.json
-#/home/jchung/miniconda3/envs/graphsage_p2.7env/bin/python -u -m graphsage.unsupervised_train --gpu 0 --train_prefix "/home/jchung/ROBOKOP/git/xDTD_training_pipeline/data/graphsage_input/data" --model_size "big" --learning_rate 0.001 --weight_decay 0.0005 --epochs 10 --samples_1 96 --samples_2 96 --dim_1 128 --dim_2 128 --model "graphsage_mean" --max_total_steps 100000000000 --validate_iter 500 --batch_size 2000 --max_degree 96
-#/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/transform_format.py --input /home/jchung/ROBOKOP/git/xDTD_training_pipeline/unsup-graphsage_input/graphsage_mean_big_0.001000
+/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/preprocess_data.py --graph_nodes data/filtered_graph_nodes_info.txt --graph_edges data/filtered_graph_edges.txt
+/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/calculate_attribute_embedding.py --batch_size 100 --node_info data/filtered_graph_nodes_info.txt
+/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/graphsage_data_generation.py --validation_percent 0.2 --emb_file data/text_embedding/embedding_biobert_namecat.pkl
+mkdir data/graphsage_input/hide
+mv data/graphsage_input/data-feats.npy hide/.
+/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/generate_random_walk.py --Gjson data/graphsage_input/data-G.json
+/home/jchung/miniconda3/envs/graphsage_p2.7env/bin/python -u -m graphsage.unsupervised_train --gpu 0 --train_prefix "/home/jchung/ROBOKOP/git/keep_all_repeat/xDTD_training_pipeline/data/graphsage_input/data" --model_size "big" --learning_rate 0.001 --weight_decay 0.0005 --epochs 10 --samples_1 25 --samples_2 10 --dim_1 128 --dim_2 128 --model "graphsage_mean" --max_total_steps 100000000000 --validate_iter 500 --batch_size 2000 --max_degree 96 --identity_dim 1
+/home/jchung/miniconda3/envs/main_env/bin/python -u scripts/transform_format.py --input unsup-graphsage_input/graphsage_mean_big_0.001000

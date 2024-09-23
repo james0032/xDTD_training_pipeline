@@ -1,12 +1,12 @@
 import sys
-
+import os
 
 from read_RKG import id_collector, split_ddpair_dump
 
 pathlist = os.getcwd().split(os.path.sep)
 ROOTindex = pathlist.index("xDTD_training_pipeline")
 ROOTPath = os.path.sep.join([*pathlist[:(ROOTindex + 1)]])
-
+print(f"rootpath is {ROOTPath}")
 sys.path.append(os.path.join(ROOTPath, 'scripts'))
 
 RKG_ROOT_PATH = os.path.join(ROOTPath, "data")

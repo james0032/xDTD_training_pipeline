@@ -16,7 +16,7 @@ import joblib
 
 pathlist = os.getcwd().split(os.path.sep)
 ROOTindex = pathlist.index("xDTD_training_pipeline")
-datapath = os.path.sep.join([*pathlist[:(ROOTindex + 1)]])
+ddpath = os.path.sep.join([*pathlist[:(ROOTindex + 1)]])
 print(f"Rootpath is set at {ddpath}")
 
 
@@ -254,7 +254,7 @@ def run_RF(emb_name):
     dftest  = dftall[~mask]
 
     # RF model and grid setup
-    print("Random forrest, grid search, crossvalidation=10")
+    print("Random forest, grid search, crossvalidation=10")
     RF_model = ensemble.RandomForestClassifier(class_weight='balanced', random_state=1023, max_features="sqrt", oob_score=True, n_jobs=-1)
     param_grid = { 'max_depth' : [depth for depth in range(20,21,5)],
                        'n_estimators': [2000],

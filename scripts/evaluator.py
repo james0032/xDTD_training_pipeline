@@ -214,7 +214,7 @@ def evaluate(model, X, y_true, calculate_metric=True):
         return [None, None, None, y_true, probas]
 
 
-def run_RF(emb_name):
+def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     # read labeled pairs
     print("Read dd pair file")
     dfori = pd.read_csv(f"{os.path.join(ddpath, 'data/Split/all_drug_disease_pairs_edges.tsv')}", sep='\t', header=0)
@@ -227,7 +227,7 @@ def run_RF(emb_name):
     with open(f"{os.path.join(ddpath, 'data/graphsage_output/featured/unsuprvised_graphsage_entity_embeddings.pkl')}", "rb") as infile:
         bioemd_dict = pickle.load(infile)
 
-    dftp = dfori[dfori['y']==1].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})
+    dftp = dfori[dfori['y']==1].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})    
     dftn = dfori[dfori['y']==0].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})
     dftall = pd.concat([dftp, dftn], axis=0).reset_index(drop=True)
     dftall = dftall[dftall['source'].isin(bioemd_dict.keys()) & dftall['target'].isin(bioemd_dict.keys())].reset_index(drop=True)

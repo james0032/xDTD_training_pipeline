@@ -9,6 +9,8 @@ from tqdm import tqdm
 import pandas as pd
 from bmt import Toolkit
 
+tqdm.pandas()
+
 BIOLINK_MODEL_VERSION = os.environ.get("BL_VERSION", "4.1.6")
 BIOLINK_MODEL_SCHEMA_URL = f"https://raw.githubusercontent.com/biolink/biolink-model/v{BIOLINK_MODEL_VERSION}/biolink-model.yaml"
 PREDICATE_MAP_URL = f"https://raw.githubusercontent.com/biolink/biolink-model/v{BIOLINK_MODEL_VERSION}/predicate_mapping.yaml"
@@ -415,7 +417,7 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
     # multiple edges for one drug-disease pair.
     # If conflict, leave them behind for now. Label as existing edges with other predicates (9)
     print("Groupby class labeling.")
-    dfpairs = dfpairs.groupby(['subject','object']).apply(class_label, tpp=tppredicates, tnp=tnpredicates, treat=treat, contra=contra).reset_index(drop=True)
+    dfpairs = dfpairs.groupby(['subject','object']).progress_apply(class_label, tpp=tppredicates, tnp=tnpredicates, treat=treat, contra=contra).reset_index(drop=True)
     dfpairs.to_csv(os.path.join(OUTDIR, "all_drug_disease_pairs_edges.tsv"), sep='\t', index=None)
     print("drug-disease pair dump.")
     split_ddpair_dump(dfpairs, drug_ids, disease_ids, treat, contra, n_random=500)

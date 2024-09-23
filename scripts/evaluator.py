@@ -278,8 +278,9 @@ def run_RF(emb_name):
     train_acc, train_macro_f1score, train_micro_f1score, train_y_true, train_y_probs = evaluate(fitModel, train_X, train_y)
     test_acc, test_macro_f1score, test_micro_f1score, test_y_true, test_y_probs = evaluate(fitModel, test_X, test_y)
     
-    dftest.loc[:, "prob"] = test_y_probs
-    dfrand.loc[:, "prob"] = fitModel(randX)
+    dftest.loc[:, "prob"] = test_y_probs[:,1]
+    
+    dfrand.loc[:, "prob"] = fitModel.predict_proba(randX)[:,1]
     
     print("Get MRR nd hit@k")
     test_mrr, test_ranklist, n_pairs = calculate_mrr(dftest, dfrand, 500)

@@ -273,7 +273,7 @@ def run_RF(emb_name):
 
     # saves the model
     model_name = f'RF_model_{emb_name}.pt'
-    joblib.dump(fitModel, os.path.join(datapath, model_name))
+    joblib.dump(fitModel, os.path.join(ddpath, model_name))
     print("Get accuracy and f1 scores.")
     train_acc, train_macro_f1score, train_micro_f1score, train_y_true, train_y_probs = evaluate(fitModel, train_X, train_y)
     test_acc, test_macro_f1score, test_micro_f1score, test_y_true, test_y_probs = evaluate(fitModel, test_X, test_y)

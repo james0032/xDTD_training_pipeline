@@ -230,6 +230,7 @@ def run_RF(emb_name):
     dftp = dfori[dfori['y']==1].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})
     dftn = dfori[dfori['y']==0].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})
     dftall = pd.concat([dftp, dftn], axis=0).reset_index(drop=True)
+    dftall = dftall[dftall['source'].isin(bioemd_dict.keys()) & dftall['target'].isin(bioemd_dict.keys())].reset_index(drop=True)
     allX, ally = generate_Xy(bioemd_dict, dftall)
     print("Read random pair files")
     dfrand = pd.read_csv(f"{os.path.join(ddpath, 'data/random_pairs.txt')}", sep='\t', header=0)

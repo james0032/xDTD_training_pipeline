@@ -304,7 +304,7 @@ def split_ddpair_dump(df, drug_ids, disease_ids, treat, contra, method="strict",
         
 def id_collector(node_file):
     drug_ids = []
-    drug_cat = ["biolink:SmallMolecule", "biolink:Drug"]
+    drug_cat = ["biolink:ChemicalEntity", ]# ["biolink:SmallMolecule", "biolink:Drug"]
     disease_ids = []
     disease_cat = ["biolink:DiseaseOrPhenotypicFeature", ]
     type_map = {}

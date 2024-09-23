@@ -304,7 +304,7 @@ def split_ddpair_dump(df, drug_ids, disease_ids, treat, contra, method="strict",
         
 def id_collector(node_file):
     drug_ids = []
-    drug_cat = ["biolink:ChemicalEntity", ]# ["biolink:SmallMolecule", "biolink:Drug"]
+    drug_cat = ["biolink:ChemicalEntity", " "]# ["biolink:SmallMolecule", "biolink:Drug"]
     disease_ids = []
     disease_cat = ["biolink:DiseaseOrPhenotypicFeature", ]
     type_map = {}
@@ -355,6 +355,8 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
         remove_edge = all_keep
     elif style == "keep_CCGGDD":
         remove_edge = keep_CCGGDD
+    elif style == "keep_CD":
+        remove_edge = keep_CD
         
     print(f"Edge file formatting using style {style}.")    
     df_edges = []

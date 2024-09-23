@@ -1,6 +1,6 @@
 import sys
 import os
-
+import pandas as pd
 from read_RKG import id_collector, split_ddpair_dump
 
 pathlist = os.getcwd().split(os.path.sep)

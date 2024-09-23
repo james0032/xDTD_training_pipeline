@@ -297,4 +297,4 @@ def run_RF(emb_name):
     print(metrics)
     
 if __name__ == "__main__":
-    run_RF(name="graphsage")
+    run_RF(emb_name="graphsage")

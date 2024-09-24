@@ -227,9 +227,9 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     with open(f"{os.path.join(ddpath, 'data/graphsage_output/featured/unsuprvised_graphsage_entity_embeddings.pkl')}", "rb") as infile:
         bioemd_dict = pickle.load(infile)
 
-    dftp = dfori[dfori['y']==1].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})  
+    dftp = dfori[dfori['y'].isin([1,2])].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})  
     print(f"TP has {dftp.shape[0]} DD pairs.")
-    dftn = dfori[dfori['y']==0].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})
+    dftn = dfori[dfori['y'].isin([0,-1])].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})
     print(f"TN has {dftn.shape[0]} DD pairs.")
     dftall = pd.concat([dftp, dftn], axis=0).reset_index(drop=True)
     dftall = dftall[dftall['source'].isin(bioemd_dict.keys()) & dftall['target'].isin(bioemd_dict.keys())].reset_index(drop=True)

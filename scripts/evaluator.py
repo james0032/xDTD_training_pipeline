@@ -238,6 +238,7 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     dfrand = pd.read_csv(f"{os.path.join(ddpath, 'data/random_pairs.txt')}", sep='\t', header=0)
     dfrand = dfrand[dfrand['source'].isin(bioemd_dict.keys())].reset_index(drop=True)
     dfrand = dfrand[dfrand['target'].isin(bioemd_dict.keys())].reset_index(drop=True)
+    print(f"{dfrand.shape[0]} random dd pairs.")
     randX, randy = generate_Xy(bioemd_dict, dfrand)
 
     # train test split

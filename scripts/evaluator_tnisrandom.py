@@ -230,12 +230,14 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     dfrand = pd.read_csv(f"{os.path.join(ddpath, 'data/random_pairs.txt')}", sep='\t', header=0)
     dfrand = dfrand[dfrand['source'].isin(bioemd_dict.keys())].reset_index(drop=True)
     dfrand = dfrand[dfrand['target'].isin(bioemd_dict.keys())].reset_index(drop=True)
+    print(f"{dfrand.shape[0]} random dd pairs.")
     randX, randy = generate_Xy(bioemd_dict, dfrand)
     
     dftp = dfori[dfori['y']==1].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})    
     dftn = dfrand.sample(frac=0.2).drop_duplicates(subset=['source', 'target']).reset_index(drop=True)
     dftn['y']=0
-    
+    print(f"TP has {dftp.shape[0]} DD pairs.")
+    print(f"TN has {dftn.shape[0]} DD pairs from random pairs.")
     #dftn = dfori[dfori['y']==0].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})
     dftall = pd.concat([dftp, dftn], axis=0).reset_index(drop=True)
     dftall = dftall[dftall['source'].isin(bioemd_dict.keys()) & dftall['target'].isin(bioemd_dict.keys())].reset_index(drop=True)

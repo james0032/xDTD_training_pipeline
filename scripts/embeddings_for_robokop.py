@@ -44,7 +44,7 @@ param_grid = {
 kmeans = KMeans(random_state=42)
 
 # Perform grid search
-grid_search = GridSearchCV(kmeans, param_grid, cv=5, scoring='neg_mean_squared_error', verbose=1)
+grid_search = GridSearchCV(kmeans, param_grid, cv=5, verbose=1)
 grid_search.fit(embedding_array)
 
 # Best model after grid search

@@ -6,7 +6,7 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score, davies_bouldin_score, calinski_harabasz_score
 from sklearn.model_selection import GridSearchCV
 import matplotlib.pyplot as plt
-
+import os
 
 pathlist = os.getcwd().split(os.path.sep)
 ROOTindex = pathlist.index("xDTD_training_pipeline")
@@ -14,7 +14,7 @@ ddpath = os.path.sep.join([*pathlist[:(ROOTindex + 1)]])
 print(f"Rootpath is set at {ddpath}")
 
 # Load the pickle file
-file_path = f"{os.path.join(ddpath, 'data/graphsage_output/featured/unsuprvised_graphsage_entity_embeddings.pkl')}"
+file_path = os.path.join(ddpath, 'data/graphsage_output/featured/unsuprvised_graphsage_entity_embeddings.pkl')
 
 with open(file_path, 'rb') as f:
     embeddings = pickle.load(f)
@@ -98,8 +98,8 @@ plt.title("KMeans Clustering of Embeddings")
 plt.xlabel("PCA Component 1")
 plt.ylabel("PCA Component 2")
 plt.colorbar(label='Cluster')
-plt.savefig()
-plt.show()
+plt.savefig(os.path.join(ddpath, 'data/kmean_5_clustering_graphsage_emb.png'), dpi=300)
+#plt.show()
 
 # Save the reduced embeddings if needed
 np.save('reduced_embeddings.npy', reduced_embeddings)

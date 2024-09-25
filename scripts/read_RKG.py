@@ -217,10 +217,6 @@ def pred_trans(edge, edge_map):
         edge_map[edge_key_string] = f"predicate:{len(edge_map)}"
     return edge_map[edge_key_string]
 
-
-def edge_dump():
-    
-
 def dump_edge_map(edge_map, outdir):
     output_file=f"{outdir}/edge_map.json"
     with open(output_file, "w") as writer:

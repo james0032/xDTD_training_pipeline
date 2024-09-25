@@ -275,7 +275,7 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     fitModel = best_rf.fit(train_X, train_y)
 
     # saves the model
-    model_name = f'RF_model_{emb_name}.pt'
+    model_name = f'RF_model_{emb_name}_{tpstyle}_{tnstyle}.pt'
     joblib.dump(fitModel, os.path.join(ddpath, model_name))
     print("Get accuracy and f1 scores.")
     train_acc, train_macro_f1score, train_micro_f1score, train_y_true, train_y_probs = evaluate(fitModel, train_X, train_y)

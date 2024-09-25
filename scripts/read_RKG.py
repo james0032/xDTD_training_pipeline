@@ -128,8 +128,8 @@ def keep_CD(edge, typemap):
     # return True if you want to filter this edge out
     # We want to keep edges between chemicals and genes, between genes and disease, and between chemicals and diseases
     # Unfortunately this means that we need a type map... Dangit
-    if edge["predicate"] == "biolink:subclass_of":
-        return True
+    #if edge["predicate"] == "biolink:subclass_of":
+    #   return True
     accepted = [ ("biolink:ChemicalEntity", "biolink:DiseaseOrPhenotypicFeature") ]
     return check_accepted(edge, typemap, accepted)
 
@@ -217,6 +217,9 @@ def pred_trans(edge, edge_map):
         edge_map[edge_key_string] = f"predicate:{len(edge_map)}"
     return edge_map[edge_key_string]
 
+
+def edge_dump():
+    
 
 def dump_edge_map(edge_map, outdir):
     output_file=f"{outdir}/edge_map.json"
@@ -359,10 +362,15 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
         remove_edge = keep_CD
         
     print(f"Edge file formatting using style {style}.")    
+    if style == "keep_CD": # all edges were separated from train_edges.jsonl. This is a special case used as baseline of the trained graph. Need to build filtered_graph_edges.txt from all_drug_disease_pairs_edges.jsonl
+        edge_file = os.path.join(OUTDIR, "Split" ,"all_drug_disease_pairs_edges.jsonl")
+    else:
+        edge_file = os.path.join(OUTDIR,"train_edges.jsonl")
+    
     df_edges = []
     c =0
     edge_map = {}
-    with open(os.path.join(OUTDIR,"train_edges.jsonl"), "r") as edgef:
+    with open(edge_file, "r") as edgef:
         with open(output_file, "w") as writer:
             for i,l in enumerate(tqdm(edgef)):
                 edge = json.loads(l)
@@ -379,7 +387,7 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
     df_edges = pd.DataFrame(df_edges) 
     edge_format = os.path.join(RKG_ROOT_PATH,"filtered_graph_edges.txt")
     df_edges.to_csv(edge_format, sep='\t', index=False)
-    print(f"formatted edge file dump for embedding completed.\n{edge_format}")
+    print(f"formatted edge file dump for embedding completed into file:\n{edge_format}")
     # Keep all nodes instead of removing orphan nodes; still has its own script section for adding filter back to orphan nodes instead of combine to the first node file read.
     print("node file formatting")
     sset = set(df_edges['source'])

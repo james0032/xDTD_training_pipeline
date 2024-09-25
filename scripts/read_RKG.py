@@ -359,7 +359,7 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
         
     print(f"Edge file formatting using style {style}.")    
     if style == "keep_CD": # all edges were separated from train_edges.jsonl. This is a special case used as baseline of the trained graph. Need to build filtered_graph_edges.txt from all_drug_disease_pairs_edges.jsonl
-        edge_file = os.path.join(OUTDIR, "Split" ,"all_drug_disease_pairs_edges.jsonl")
+        edge_file = os.path.join(OUTDIR,"all_drug_disease_pairs_edges.jsonl")
     else:
         edge_file = os.path.join(OUTDIR,"train_edges.jsonl")
     

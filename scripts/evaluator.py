@@ -224,7 +224,7 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     #    bioemd_dict = pickle.load(infile)
 
     # Graphsage output embeddings
-    with open(f"{os.path.join(ddpath, 'data/graphsage_output/featured/unsuprvised_graphsage_entity_embeddings.pkl')}", "rb") as infile:
+    with open(f"{os.path.join(ddpath, 'data/graphsage_output/unsuprvised_graphsage_entity_embeddings.pkl')}", "rb") as infile:
         bioemd_dict = pickle.load(infile)
 
     dftp = dfori[dfori['y']==1].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})  

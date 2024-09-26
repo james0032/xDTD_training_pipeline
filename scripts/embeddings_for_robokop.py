@@ -14,7 +14,7 @@ ddpath = os.path.sep.join([*pathlist[:(ROOTindex + 1)]])
 print(f"Rootpath is set at {ddpath}")
 
 # Load the pickle file
-file_path = os.path.join(ddpath, 'data/graphsage_output/featured/unsuprvised_graphsage_entity_embeddings.pkl')
+file_path = os.path.join(ddpath, 'data/graphsage_output/unsuprvised_graphsage_entity_embeddings.pkl')
 
 with open(file_path, 'rb') as f:
     embeddings = pickle.load(f)

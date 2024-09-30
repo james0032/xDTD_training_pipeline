@@ -267,7 +267,7 @@ def split_ddpair_dump(df, drug_ids, disease_ids, treat, contra, method="strict",
         random_pairs = []
         for drug in tqdm(set(dftp['subject'])):
             exists = []
-            for disease in random.sample(disease_ids, 500):
+            for disease in random.sample(disease_ids, n_random):
                 this_pair = drug+disease
                 if this_pair in df['string']:
                     exists.append(this_pair)
@@ -281,7 +281,7 @@ def split_ddpair_dump(df, drug_ids, disease_ids, treat, contra, method="strict",
             #    print(f"drug-disease pairs exist: {exists}")
         for disease in tqdm(set(dftp['object'])):
             exists = []
-            for drug in random.sample(drug_ids, 500):
+            for drug in random.sample(drug_ids, n_random):
                 this_pair = drug+disease
                 if this_pair in df['string']:
                     exists.append(this_pair)

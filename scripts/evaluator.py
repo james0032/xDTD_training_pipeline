@@ -264,24 +264,33 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     dftrain = dftall[mask]
     dftest  = dftall[~mask]
 
-    # RF model and grid setup
-    print("Random forest, grid search, crossvalidation=10")
-    RF_model = ensemble.RandomForestClassifier(class_weight='balanced', random_state=1023, max_features="sqrt", oob_score=True, n_jobs=-1)
-    param_grid = { 'max_depth' : [depth for depth in range(20,21,5)],
-                       'n_estimators': [2000],
-                       'class_weight': ["balanced", "balanced_subsample"]
-        }
-
-    gs_rf = GridSearchCV(estimator=RF_model, param_grid=param_grid, cv= 5, scoring='f1_macro', return_train_score=True)
-    gs_rf.fit(train_X, train_y)
-    print(f"The best hyper-parameter set of RF model based on gridseaerchCV is {gs_rf.best_estimator_}")
-    best_rf = gs_rf.best_estimator_
-
-    fitModel = best_rf.fit(train_X, train_y)
-
-    # saves the model
     model_name = f'RF_model_{emb_name}_{tpstyle}_{tnstyle}.pt'
-    joblib.dump(fitModel, os.path.join(ddpath, model_name))
+
+    if not os.path.exists(os.path.join(ddpath, model_name)):
+        # RF model and grid setup
+        print("model does not exist. New training model")
+        print("Random forest, grid search, crossvalidation=10")
+        RF_model = ensemble.RandomForestClassifier(class_weight='balanced', random_state=1023, max_features="sqrt", oob_score=True, n_jobs=-1)
+        param_grid = { 'max_depth' : [depth for depth in range(20,21,5)],
+                        'n_estimators': [2000],
+                        'class_weight': ["balanced", "balanced_subsample"]
+            }
+
+        gs_rf = GridSearchCV(estimator=RF_model, param_grid=param_grid, cv= 5, scoring='f1_macro', return_train_score=True)
+        gs_rf.fit(train_X, train_y)
+        print(f"The best hyper-parameter set of RF model based on gridseaerchCV is {gs_rf.best_estimator_}")
+        best_rf = gs_rf.best_estimator_
+
+        fitModel = best_rf.fit(train_X, train_y)
+
+        # saves the model
+        
+        joblib.dump(fitModel, os.path.join(ddpath, model_name))
+    
+    else:
+        print("Model trained. Loading model")
+        fitModel = joblib.load(os.path.join(ddpath, model_name))
+    
     print("Get accuracy and f1 scores.")
     train_acc, train_macro_f1score, train_micro_f1score, train_y_true, train_y_probs = evaluate(fitModel, train_X, train_y)
     test_acc, test_macro_f1score, test_micro_f1score, test_y_true, test_y_probs = evaluate(fitModel, test_X, test_y)
@@ -320,4 +329,4 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     
     
 if __name__ == "__main__":
-    run_RF(emb_name="biobert")
+    run_RF(emb_name="graphsage")

@@ -219,13 +219,15 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     print("Read dd pair file")
     dfori = pd.read_csv(f"{os.path.join(ddpath, 'data/Split/all_drug_disease_pairs_edges.tsv')}", sep='\t', header=0)
     print("Read embedding file")
+    
+    if emb_name == "biobert":
     # biobert embeddings
-    #with open(f"{os.path.join(ddpath, 'data/text_embedding/embedding_biobert_namecat.pkl')}", "rb") as infile:
-    #    bioemd_dict = pickle.load(infile)
-
+        with open(f"{os.path.join(ddpath, 'data/text_embedding/embedding_biobert_namecat.pkl')}", "rb") as infile:
+            bioemd_dict = pickle.load(infile)
+    elif emb_name == "graphsage":
     # Graphsage output embeddings
-    with open(f"{os.path.join(ddpath, 'data/graphsage_output/unsuprvised_graphsage_entity_embeddings.pkl')}", "rb") as infile:
-        bioemd_dict = pickle.load(infile)
+        with open(f"{os.path.join(ddpath, 'data/graphsage_output/unsuprvised_graphsage_entity_embeddings.pkl')}", "rb") as infile:
+            bioemd_dict = pickle.load(infile)
 
     dftp = dfori[dfori['y']==1].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})  
     print(f"TP has {dftp.shape[0]} DD pairs.")
@@ -240,7 +242,10 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     dfrand = dfrand[dfrand['target'].isin(bioemd_dict.keys())].reset_index(drop=True)
     print(f"{dfrand.shape[0]} random dd pairs.")
     randX, randy = generate_Xy(bioemd_dict, dfrand)
-
+    
+    ###### SPACE to generate relaxed TP samples for evaluating model later #####
+    
+    
     # train test split
     frac = 0.9
     print(f"train/test split ratio is {frac}/{(1-frac)}")
@@ -281,9 +286,13 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     train_acc, train_macro_f1score, train_micro_f1score, train_y_true, train_y_probs = evaluate(fitModel, train_X, train_y)
     test_acc, test_macro_f1score, test_micro_f1score, test_y_true, test_y_probs = evaluate(fitModel, test_X, test_y)
     
+    dftrain.loc[:, "prob"] = train_y_probs[:,1]
+    
     dftest.loc[:, "prob"] = test_y_probs[:,1]
     
     dfrand.loc[:, "prob"] = fitModel.predict_proba(randX)[:,1]
+    
+    ### Also add dfrelax to fitModel.predict ####
     
     print("Get MRR nd hit@k")
     test_mrr, test_ranklist, n_pairs = calculate_mrr(dftest, dfrand, 500)
@@ -302,6 +311,13 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
         
     }
     print(metrics)
+    
+    # dataframe dump
+    dfallprob = pd.concat([dftrain, dftest], axis=0)
+    dfallprob = dfallprob.reset_index(drop=True)
+    dfallprob.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}_dfallprob.csv"))
+    dfrand.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}_dfrandprob.csv"))
+    
     
 if __name__ == "__main__":
     run_RF(emb_name="graphsage")

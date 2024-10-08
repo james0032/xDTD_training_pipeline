@@ -320,4 +320,4 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     
     
 if __name__ == "__main__":
-    run_RF(emb_name="graphsage")
+    run_RF(emb_name="biobert")

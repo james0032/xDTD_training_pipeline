@@ -5,7 +5,7 @@ import pickle
 import numpy as np
 import random
 import argparse
-
+import sys
 import sklearn.ensemble as ensemble
 import sklearn.metrics as met
 from sklearn.model_selection import GridSearchCV
@@ -14,9 +14,14 @@ random.seed(1023)
 
 import joblib
 
+
+## Import Personal Packages
 pathlist = os.getcwd().split(os.path.sep)
 ROOTindex = pathlist.index("xDTD_training_pipeline")
 ddpath = os.path.sep.join([*pathlist[:(ROOTindex + 1)]])
+sys.path.append(os.path.join(ddpath, 'scripts'))
+import utils
+
 print(f"Rootpath is set at {ddpath}")
 
 
@@ -222,10 +227,12 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     
     if emb_name == "biobert":
     # biobert embeddings
+        print("Read Biobert embedding layer.")
         with open(f"{os.path.join(ddpath, 'data/text_embedding/embedding_biobert_namecat.pkl')}", "rb") as infile:
             bioemd_dict = pickle.load(infile)
     elif emb_name == "graphsage":
     # Graphsage output embeddings
+        print("Read graphsage embedding layer.")
         with open(f"{os.path.join(ddpath, 'data/graphsage_output/unsuprvised_graphsage_entity_embeddings.pkl')}", "rb") as infile:
             bioemd_dict = pickle.load(infile)
 
@@ -329,4 +336,11 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     
     
 if __name__ == "__main__":
-    run_RF(emb_name="graphsage")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--emb_name", type=str, help="[graphsage|biobert]", required=True)
+    args = parser.parse_args()
+    
+    logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
+    logger.info(args)
+    
+    run_RF(emb_name=args.emb_name)

@@ -36,5 +36,6 @@ dfdrug = dfdrug.drop_duplicates(subset=["single_ID"])
 dfind = pd.read_csv(os.path.join(ROOTPATH, "dis_list/matrix-disease-list-2024-10-08/matrix-disease-list.tsv"), sep='\t', header=0)
     
 dfdrug["in_keys"] = dfdrug["single_ID"].isin(bioemd_dict.keys())
+print(f"Number of embedded nodes in this embedding layer is {len(bioemd_dict)}")
 print(dfdrug["in_keys"].value_counts())
 print(dfdrug[-dfdrug["in_keys"]]["single_ID"])

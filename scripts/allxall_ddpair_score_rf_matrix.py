@@ -32,4 +32,4 @@ dfdrug = pd.read_csv(os.path.join(ROOTPATH, "drug_list/v104", "drugList.tsv"), s
 dfdrug = dfdrug.drop_duplicates(subset=["single_ID"])
 dfind = pd.read_csv(os.path.join(ROOTPATH, "dis_list/v2408", "matrix-disease-list.tsv"), sep='\t')
     
-print(list(emb_name.keys())[:10])
+print(list(bioemd_dict.keys())[:10])

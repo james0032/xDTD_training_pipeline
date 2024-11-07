@@ -35,5 +35,6 @@ dfdrug = pd.read_csv(os.path.join(ROOTPATH, "drug_list/v104", "drugList.tsv"), s
 dfdrug = dfdrug.drop_duplicates(subset=["single_ID"])
 dfind = pd.read_csv(os.path.join(ROOTPATH, "dis_list/v2408", "matrix-disease-list.tsv"), sep='\t')
     
-dfdrug["vector"] = dfdrug["single_ID"].apply(lambda x: bioemd_dict[x])
-print(dfdrug.loc[:5, "vector"])
+dfdrug["in_keys"] = dfdrug["single_ID"].isin(bioemd_dict.keys())
+print(dfdrug["in_keys"].value_counts)
+print(dfdrug[-dfdrug["in_keys"]]["single_ID"])

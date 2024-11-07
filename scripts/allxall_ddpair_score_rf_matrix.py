@@ -38,4 +38,6 @@ dfind = pd.read_csv(os.path.join(ROOTPATH, "dis_list/matrix-disease-list-2024-10
 dfdrug["in_keys"] = dfdrug["single_ID"].isin(bioemd_dict.keys())
 print(f"Number of embedded nodes in this embedding layer is {len(bioemd_dict)}")
 print(dfdrug["in_keys"].value_counts())
+dfind["in_keys"] = dfind["category_class"].isin(bioemd_dict.keys())
+print(dfind["in_keys"].value_counts())
 print(dfdrug[-dfdrug["in_keys"]]["single_ID"])

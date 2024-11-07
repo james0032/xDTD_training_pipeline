@@ -11,7 +11,10 @@ ddpath = os.path.sep.join([*pathlist[:(ROOTindex + 1)]])
 sys.path.append(os.path.join(ddpath, 'scripts'))
 import utils
 
-emb_name = "graphsage"; tpstyle="stringent"; tnstyle="stringent"
+emb_name = "graphsage"; 
+tpstyle="stringent"; 
+tnstyle="stringent"
+
 model_name = f'RF_model_{emb_name}_{tpstyle}_{tnstyle}.pt'
 fitModel = joblib.load(os.path.join(ddpath, model_name))
 
@@ -32,4 +35,5 @@ dfdrug = pd.read_csv(os.path.join(ROOTPATH, "drug_list/v104", "drugList.tsv"), s
 dfdrug = dfdrug.drop_duplicates(subset=["single_ID"])
 dfind = pd.read_csv(os.path.join(ROOTPATH, "dis_list/v2408", "matrix-disease-list.tsv"), sep='\t')
     
-print(list(bioemd_dict.keys())[:10])
+dfdrug["vector"] = dfdrug["single_ID"].apply(lambda x: bioemd_dict[x])
+print(dfdrug.loc[:5, "vector"])

@@ -64,4 +64,4 @@ print(dfind.shape)
 dfdrug["emb_vector"] = dfdrug["found_ID"].apply(lambda x: bioemd_dict[x])
 dfind["emb_vector"] = dfind["category_class"].apply(lambda x: bioemd_dict[x])
 
-print(f"Example emb vector and size {dfdrug.loc["CHEBI:10023", "emb_vector"]}, {len(dfdrug.loc["CHEBI:10023", "emb_vector"])}")
+print(f"Example emb vector and size {dfdrug["emb_vector"][1]}, {len(dfdrug["emb_vector"][1])}")

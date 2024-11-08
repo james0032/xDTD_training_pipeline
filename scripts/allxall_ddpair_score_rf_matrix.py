@@ -15,7 +15,6 @@ def main(emb_name):
     sys.path.append(os.path.join(ddpath, 'scripts'))
     import utils
 
-    #emb_name = "biobert"; 
     tpstyle="stringent"; 
     tnstyle="stringent"
 

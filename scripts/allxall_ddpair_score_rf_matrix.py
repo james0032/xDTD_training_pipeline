@@ -13,7 +13,7 @@ ddpath = os.path.sep.join([*pathlist[:(ROOTindex + 1)]])
 sys.path.append(os.path.join(ddpath, 'scripts'))
 import utils
 
-emb_name = "graphsage"; 
+emb_name = "biobert"; 
 tpstyle="stringent"; 
 tnstyle="stringent"
 
@@ -82,4 +82,4 @@ for idx, row in tqdm(dfind.iterrows()):
     #dfcur["probability"] = cur_result[:,0]
     dfcur["prediction"] = cur_result[:,1]
     
-    dfcur.to_csv(os.path.join(ROOTPATH, f"results/graphsage/gs_emb_prediction_{row['category_class']}.csv"), index=False, header=False)
+    dfcur.to_csv(os.path.join(ROOTPATH, f"results/{emb_name}/emb_prediction_{row['category_class']}.csv"), index=False, header=False)

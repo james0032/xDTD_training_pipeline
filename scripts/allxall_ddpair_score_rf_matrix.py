@@ -54,8 +54,8 @@ dfdrug = dfdrug.drop_duplicates(subset=["single_ID"]).reset_index(drop=True)
 dfdrug["found_ID"] = dfdrug.apply(lambda x: find_key(x.single_ID, x.Equivalent_IDs, bioemd_dict.keys()), axis=1)
 dfdrug = dfdrug[-(dfdrug["found_ID"]==KEYNOTEXIST)].reset_index(drop=True)
 dfdrug.to_csv(os.path.join(ROOTPATH, "drug_list/v110/matrix-drug-list-1.1.0/drug-list/data/03_primary/drugList_KeyNotExist.tsv"))
-print("After keynotexist removed")
-print(dfdrug[dfdrug["found_ID"]==KEYNOTEXIST]["single_ID"].values)
+#print("After keynotexist removed")
+#print(dfdrug[dfdrug["found_ID"]==KEYNOTEXIST]["single_ID"].values)
 print(dfdrug.shape)
 
 dfind = pd.read_csv(os.path.join(ROOTPATH, "dis_list/matrix-disease-list-2024-10-08/matrix-disease-list.tsv"), sep='\t', header=0)
@@ -67,7 +67,7 @@ print(dfind.shape)
 dfdrug["emb_vector"] = dfdrug["found_ID"].apply(lambda x: bioemd_dict[x])
 dfind["emb_vector"] = dfind["category_class"].apply(lambda x: bioemd_dict[x])
 testcase = dfdrug["emb_vector"][1]
-print(f"Example emb vector and size {testcase}, {len(testcase)}")
+#print(f"Example emb vector and size {testcase}, {len(testcase)}")
 
 def generate_X(drug_vs, disv):
     disv = np.tile(disv, [len(drug_vs), 1])
@@ -75,7 +75,7 @@ def generate_X(drug_vs, disv):
     return np.concatenate((drug_vs, disv), axis=1)
 
 dfcur = dfdrug[["single_ID", "ID_Label"]].rename(columns={"single_ID": "Drug_ID", "ID_Label": "Drug_Name"})
-for idx, row in tqdm(dfind.head(10).iterrows()):
+for idx, row in tqdm(dfind.iterrows()):
     dfcur["Disease_ID"] = row["category_class"] # disease ID
     dfcur["Disease_Name"] = row["label"] # disease name
     cur_result = fitModel.predict_proba(generate_X(dfdrug["emb_vector"], row["emb_vector"]))

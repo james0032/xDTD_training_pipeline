@@ -74,7 +74,7 @@ def generate_X(drug_vs, disv):
     return np.concatenate((drug_vs, disv), axis=1)
 
 dfcur = dfdrug[["single_ID", "ID_Label"]].rename(columns={"single_ID": "Drug_ID", "ID_Label": "Drug_Name"})
-for idx, row in dfdrug.head(10).iterrows():
+for idx, row in dfind.head(10).iterrows():
     dfcur["Disease_ID"] = row["category_class"] # disease ID
     dfcur["Disease_Name"] = row["label"] # disease name
     cur_result = fitModel.predict_proba(generate_X(dfdrug["emb_vector"], row["emb_vector"]))

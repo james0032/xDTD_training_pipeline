@@ -19,7 +19,7 @@ tnstyle="stringent"
 
 model_name = f'RF_model_{emb_name}_{tpstyle}_{tnstyle}.pt'
 fitModel = joblib.load(os.path.join(ddpath, model_name))
-
+print(f"ROOT PATH is {ddpath}")
 if emb_name == "biobert":
     # biobert embeddings
     print("Read Biobert embedding layer.")

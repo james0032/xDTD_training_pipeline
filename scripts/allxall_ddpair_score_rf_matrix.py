@@ -2,6 +2,7 @@ import joblib
 import os
 import sys
 import pandas as pd
+import numpy as np
 import pickle
 
 ## Import Personal Packages
@@ -35,14 +36,15 @@ def find_key(ID, eIDs, nodelist):
     #ID = x["single_ID"]
     #eIDs = x["Equivalent_IDs"]
     if ID in nodelist:
-        print(f"found {ID}")
+        print(f"found {ID} on single_ID column")
         return ID
     else:
         keys = eIDs.split("|")[0].replace("[", "").replace("]", "").replace("\"", "").replace("\'", "").replace(" ", "").split(",")
         for k in keys:
             if k in nodelist:
+                print(f"found {k} on Equivalent_IDs column")
                 return k
-            
+        print(f"Used KG does not have ID {keys}")    
         return KEYNOTEXIST
 
 print(f"Number of embedded nodes in this embedding layer is {len(bioemd_dict)}")
@@ -65,3 +67,18 @@ dfdrug["emb_vector"] = dfdrug["found_ID"].apply(lambda x: bioemd_dict[x])
 dfind["emb_vector"] = dfind["category_class"].apply(lambda x: bioemd_dict[x])
 testcase = dfdrug["emb_vector"][1]
 print(f"Example emb vector and size {testcase}, {len(testcase)}")
+
+def generate_X(drug_vs, disv):
+    disv = np.tile(disv, [len(drug_vs), 1])
+    drug_vs = np.stack(drug_vs)
+    return np.concatenate((drug_vs, disv), axis=1)
+
+dfcur = dfdrug[["single_ID", "ID_Label"]].rename(columns={"single_ID": "Drug_ID", "ID_Label": "Drug_Name"})
+for idx, row in dfdrug.head(10).iterrows():
+    dfcur["Disease_ID"] = row["category_class"] # disease ID
+    dfcur["Disease_Name"] = row["label"] # disease name
+    cur_result = fitModel.predict_proba(generate_X(dfdrug["emb_vector"], row["emb_vector"]))
+    dfcur["probability"] = cur_result[:,0]
+    dfcur["prediction"] = cur_result[:,1]
+    
+    dfcur.to_csv(os.path.join(ROOTPATH, f"results/graphsage/gs_emb_prediction_{row["category_class"]}.csv"), index=False, header=False)

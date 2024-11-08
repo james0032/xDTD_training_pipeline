@@ -35,6 +35,7 @@ def find_key(ID, eIDs, nodelist):
     #ID = x["single_ID"]
     #eIDs = x["Equivalent_IDs"]
     if ID in nodelist:
+        print(f"found {ID}")
         return ID
     else:
         keys = eIDs.split("|")[0].replace("[", "").replace("]", "").replace("\"", "").replace("\'", "").replace(" ", "").split(",")
@@ -49,7 +50,7 @@ dfdrug = pd.read_csv(os.path.join(ROOTPATH, "drug_list/v110/matrix-drug-list-1.1
 dfdrug = dfdrug.drop_duplicates(subset=["single_ID"]).reset_index(drop=True)
 dfdrug["found_ID"] = dfdrug.apply(lambda x: find_key(x.single_ID, x.Equivalent_IDs, bioemd_dict.keys()), axis=1)
 dfind = pd.read_csv(os.path.join(ROOTPATH, "dis_list/matrix-disease-list-2024-10-08/matrix-disease-list.tsv"), sep='\t', header=0)
-    
+
 #dfdrug["in_keys"] = dfdrug["single_ID"].isin(bioemd_dict.keys())
 print(f"Number of embedded nodes in this embedding layer is {len(bioemd_dict)}")
 print(dfdrug["found_ID"].value_counts())

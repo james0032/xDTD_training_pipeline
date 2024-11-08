@@ -4,6 +4,7 @@ import sys
 import pandas as pd
 import numpy as np
 import pickle
+from tqdm import tqdm
 
 ## Import Personal Packages
 pathlist = os.getcwd().split(os.path.sep)
@@ -74,11 +75,11 @@ def generate_X(drug_vs, disv):
     return np.concatenate((drug_vs, disv), axis=1)
 
 dfcur = dfdrug[["single_ID", "ID_Label"]].rename(columns={"single_ID": "Drug_ID", "ID_Label": "Drug_Name"})
-for idx, row in dfind.head(10).iterrows():
+for idx, row in tqdm(dfind.head(10).iterrows()):
     dfcur["Disease_ID"] = row["category_class"] # disease ID
     dfcur["Disease_Name"] = row["label"] # disease name
     cur_result = fitModel.predict_proba(generate_X(dfdrug["emb_vector"], row["emb_vector"]))
-    dfcur["probability"] = cur_result[:,0]
+    #dfcur["probability"] = cur_result[:,0]
     dfcur["prediction"] = cur_result[:,1]
     
     dfcur.to_csv(os.path.join(ROOTPATH, f"results/graphsage/gs_emb_prediction_{row['category_class']}.csv"), index=False, header=False)

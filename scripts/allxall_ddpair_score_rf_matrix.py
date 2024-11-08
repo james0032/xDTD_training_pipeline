@@ -45,20 +45,23 @@ def find_key(ID, eIDs, nodelist):
             
         return KEYNOTEXIST
 
-
+print(f"Number of embedded nodes in this embedding layer is {len(bioemd_dict)}")
 dfdrug = pd.read_csv(os.path.join(ROOTPATH, "drug_list/v110/matrix-drug-list-1.1.0/drug-list/data/03_primary/drugList.tsv"), sep='\t', header=0)
 dfdrug = dfdrug.drop_duplicates(subset=["single_ID"]).reset_index(drop=True)
 dfdrug["found_ID"] = dfdrug.apply(lambda x: find_key(x.single_ID, x.Equivalent_IDs, bioemd_dict.keys()), axis=1)
-dfind = pd.read_csv(os.path.join(ROOTPATH, "dis_list/matrix-disease-list-2024-10-08/matrix-disease-list.tsv"), sep='\t', header=0)
-
-#dfdrug["in_keys"] = dfdrug["single_ID"].isin(bioemd_dict.keys())
-print(f"Number of embedded nodes in this embedding layer is {len(bioemd_dict)}")
-print(dfdrug["found_ID"].value_counts())
+dfdrug = dfdrug[-dfdrug["found_ID"]==KEYNOTEXIST].reset_index(drop=True)
+dfdrug.to_csv(os.path.join(ROOTPATH, "drug_list/v110/matrix-drug-list-1.1.0/drug-list/data/03_primary/drugList_KeyNotExist.tsv"))
+print("After keynotexist removed")
 print(dfdrug[dfdrug["found_ID"]==KEYNOTEXIST]["single_ID"].values)
+print(dfdrug.shape)
 
+dfind = pd.read_csv(os.path.join(ROOTPATH, "dis_list/matrix-disease-list-2024-10-08/matrix-disease-list.tsv"), sep='\t', header=0)
 dfind["in_keys"] = dfind["category_class"].isin(bioemd_dict.keys())
-
 print(dfind["in_keys"].value_counts())
 dfind = dfind[dfind["in_keys"]].reset_index(drop=True)
 print(dfind.shape)
 
+dfdrug["emb_vector"] = dfdrug["found_ID"].apply(lambda x: bioemd_dict[x])
+dfind["emb_vector"] = dfind["category_class"].apply(lambda x: bioemd_dict[x])
+
+print(f"Example emb vector and size {dfdrug.loc["CHEBI:10023", "emb_vector"]}, {len(dfdrug.loc["CHEBI:10023", "emb_vector"])}")

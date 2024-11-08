@@ -31,18 +31,21 @@ elif emb_name == "graphsage":
 
 ROOTPATH = "/projects/aixb/jchung/everycure/alltoall"
 KEYNOTEXIST = "KeyNotExist"
-def find_key(eIDs: str, nodelist):
-    keys = eIDs.split("|")[0].replace("[", "").replace("]", "").replace("\"", "").replace("\'", "").replace(" ", "").split(",")
-    for k in keys:
-        if k in nodelist:
-            return k
-        
-    return KEYNOTEXIST
+def find_key(ID, eIDs: str, nodelist):
+    if ID in nodelist:
+        return ID
+    else:
+        keys = eIDs.split("|")[0].replace("[", "").replace("]", "").replace("\"", "").replace("\'", "").replace(" ", "").split(",")
+        for k in keys:
+            if k in nodelist:
+                return k
+            
+        return KEYNOTEXIST
 
 
 dfdrug = pd.read_csv(os.path.join(ROOTPATH, "drug_list/v110/matrix-drug-list-1.1.0/drug-list/data/03_primary/drugList.tsv"), sep='\t', header=0)
 dfdrug = dfdrug.drop_duplicates(subset=["single_ID"]).reset_index(drop=True)
-dfdrug["found_ID"] = dfdrug["Equivalent_IDs"].apply(lambda x: find_key(x, bioemd_dict.keys()))
+dfdrug["found_ID"] = dfdrug.apply(lambda x: find_key(x["single_ID"], x["Equivalent_IDs"], bioemd_dict.keys()))
 dfind = pd.read_csv(os.path.join(ROOTPATH, "dis_list/matrix-disease-list-2024-10-08/matrix-disease-list.tsv"), sep='\t', header=0)
     
 #dfdrug["in_keys"] = dfdrug["single_ID"].isin(bioemd_dict.keys())

@@ -81,4 +81,4 @@ for idx, row in dfdrug.head(10).iterrows():
     dfcur["probability"] = cur_result[:,0]
     dfcur["prediction"] = cur_result[:,1]
     
-    dfcur.to_csv(os.path.join(ROOTPATH, f"results/graphsage/gs_emb_prediction_{row["category_class"]}.csv"), index=False, header=False)
+    dfcur.to_csv(os.path.join(ROOTPATH, f"results/graphsage/gs_emb_prediction_{row['category_class']}.csv"), index=False, header=False)

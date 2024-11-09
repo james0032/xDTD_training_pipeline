@@ -340,7 +340,7 @@ if __name__ == "__main__":
     parser.add_argument("--emb_name", type=str, help="[graphsage|biobert]", required=True)
     args = parser.parse_args()
     
-    logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
-    logger.info(args)
+    #logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
+    #logger.info(args)
     
     run_RF(emb_name=args.emb_name)

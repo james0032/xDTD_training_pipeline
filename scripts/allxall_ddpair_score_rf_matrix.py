@@ -53,8 +53,9 @@ def main(emb_name):
     dfdrug = pd.read_csv(os.path.join(ROOTPATH, "drug_list/v110/matrix-drug-list-1.1.0/drug-list/data/03_primary/drugList.tsv"), sep='\t', header=0)
     dfdrug = dfdrug.drop_duplicates(subset=["single_ID"]).reset_index(drop=True)
     dfdrug["found_ID"] = dfdrug.apply(lambda x: find_key(x.single_ID, x.Equivalent_IDs, bioemd_dict.keys()), axis=1)
-    dfdrug = dfdrug[-(dfdrug["found_ID"]==KEYNOTEXIST)].reset_index(drop=True)
     dfdrug.to_csv(os.path.join(ROOTPATH, "drug_list/v110/matrix-drug-list-1.1.0/drug-list/data/03_primary/drugList_KeyNotExist.tsv"))
+    dfdrug = dfdrug[-(dfdrug["found_ID"]==KEYNOTEXIST)].reset_index(drop=True)
+    
     #print("After keynotexist removed")
     #print(dfdrug[dfdrug["found_ID"]==KEYNOTEXIST]["single_ID"].values)
     print(dfdrug.shape)

@@ -270,7 +270,7 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
 
     dftrain = dftall[mask]
     dftest  = dftall[~mask]
-
+    
     model_name = f'RF_model_{emb_name}_{tpstyle}_{tnstyle}.pt'
 
     if not os.path.exists(os.path.join(ddpath, model_name)):
@@ -308,6 +308,8 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     
     dfrand.loc[:, "prob"] = fitModel.predict_proba(randX)[:,1]
     
+    dftrain.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}_dftrain.csv"))
+    dftest.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}_dftest.csv"))
     ### Also add dfrelax to fitModel.predict ####
     
     print("Get MRR nd hit@k")

@@ -337,8 +337,10 @@ def create_start_graph(node_file=os.path.join(RKG_ROOT_PATH,"nodes.jsonl"), edge
                         edge = json.loads(l)
                         if (edge['subject'] in drug_ids) and (edge['object'] in disease_ids):
                             ddpair_edges.write(l)
+                            trainedges.write(l)
                         elif (edge['subject'] in disease_ids) and (edge['object'] in drug_ids):
                             revedges.write(l)
+                            trainedges.write(l)
                         else:
                             trainedges.write(l)
                             

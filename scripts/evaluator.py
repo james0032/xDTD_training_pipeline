@@ -346,4 +346,4 @@ if __name__ == "__main__":
     #logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
     #logger.info(args)
     
-    run_RF(emb_name=args.emb_name, infile=args.pickle_file_name)
+    run_RF(emb_name=args.emb_name, pklfile=args.pickle_file_name)

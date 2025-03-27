@@ -219,7 +219,7 @@ def evaluate(model, X, y_true, calculate_metric=True):
         return [None, None, None, y_true, probas]
 
 
-def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
+def run_RF(emb_name, pklfile, tpstyle="stringent", tnstyle="stringent"):
     # read labeled pairs
     print("Read dd pair file")
     dfori = pd.read_csv(f"{os.path.join(ddpath, 'data/Split/all_drug_disease_pairs_edges.tsv')}", sep='\t', header=0)
@@ -228,12 +228,12 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
     if emb_name == "biobert":
     # biobert embeddings
         print("Read Biobert embedding layer.")
-        with open(f"{os.path.join(ddpath, 'data/text_embedding/embedding_biobert_namecat.pkl')}", "rb") as infile:
+        with open(f"{os.path.join(ddpath, f'data/text_embedding/{pklfile}')}", "rb") as infile:
             bioemd_dict = pickle.load(infile)
     elif emb_name == "graphsage":
     # Graphsage output embeddings
         print("Read graphsage embedding layer.")
-        with open(f"{os.path.join(ddpath, 'data/graphsage_output/unsuprvised_graphsage_entity_embeddings.pkl')}", "rb") as infile:
+        with open(f"{os.path.join(ddpath, f'data/graphsage_output/{pklfile}')}", "rb") as infile:
             bioemd_dict = pickle.load(infile)
 
     dftp = dfori[dfori['y']==1].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})  
@@ -340,9 +340,10 @@ def run_RF(emb_name, tpstyle="stringent", tnstyle="stringent"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--emb_name", type=str, help="[graphsage|biobert]", required=True)
+    parser.add_argument("--pickle_file_name", type=str, help="Embedding vectors in pickle format", required=True)
     args = parser.parse_args()
     
     #logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
     #logger.info(args)
     
-    run_RF(emb_name=args.emb_name)
+    run_RF(emb_name=args.emb_name, infile=args.pickle_file_name)

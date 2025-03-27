@@ -14,3 +14,7 @@ __pycache__/
 
 # python compiled files
 *.pyc
+
+# data folders
+data/
+log_folder/

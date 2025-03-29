@@ -66,7 +66,7 @@ if __name__ == "__main__":
     parser.add_argument("--outfile", type=str, help="Output random walk file prefix", default="data-walks")
     args = parser.parse_args()
 
-    logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
+    logger = utils.get_logger(os.path.join(args.log_dir,f"RW{args.number_of_walks}_WL{args.walk_length}_{args.log_name}"))
     logger.info(args)
 
     #create output directory
@@ -102,13 +102,13 @@ if __name__ == "__main__":
             walk_result = np.array(G_nodes)[indexes]
             out_res = convert_array_to_pair_list(walk_result)
             
-            with open(os.path.join(args.output_folder, f'{args.outfile}-RW{args.number_of_walks}-WL{args.walk_length}.txt'), "a") as fp:
-                if i==0:
-                    fp.write("\n".join([str(p[0]) + "\t" + str(p[1]) for p in out_res]))
-                else:
-                    fp.write("\n")
-                    fp.write("\n".join([str(p[0]) + "\t" + str(p[1]) for p in out_res]))
-
+            fp = open(os.path.join(args.output_folder, f'{args.outfile}-RW{args.number_of_walks}-WL{args.walk_length}.txt'), "a")
+            if i==0:
+                fp.write("\n".join([str(p[0]) + "\t" + str(p[1]) for p in out_res]))
+            else:
+                fp.write("\n")
+                fp.write("\n".join([str(p[0]) + "\t" + str(p[1]) for p in out_res]))
+            fp.close()
     # ## run each batch in parallel
     # for i in range(len(batch)):
     #     if((i+1)<len(batch)):

@@ -50,7 +50,7 @@ import utils
 def convert_array_to_pair_list(walk_result):
     pairs = []
     for row in walk_result:
-        pairs.extend((row[0], item) for item in row[1:])
+        pairs.extend((row[0], item) for item in row[1:] if (row[0] != item))
     return pairs
 
 if __name__ == "__main__":
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, help="Size of batch for each run", default=200000)
     # parser.add_argument("--process", type=int, help="Number of processes to be used", default=-1)
     parser.add_argument("--output_folder", type=str, help="The path of output folder", default=os.path.join(ROOTPath, "data", "graphsage_input"))
-
+    parser.add_argument("--outfile", type=str, help="Output random walk file prefix", default="data-walks")
     args = parser.parse_args()
 
     logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
@@ -102,7 +102,7 @@ if __name__ == "__main__":
             walk_result = np.array(G_nodes)[indexes]
             out_res = convert_array_to_pair_list(walk_result)
             
-            with open(os.path.join(args.output_folder, 'data-walks.txt'), "a") as fp:
+            with open(os.path.join(args.output_folder, f'{args.outfile}-RW{args.number_of_walks}-WL{args.walk_length}.txt'), "a") as fp:
                 if i==0:
                     fp.write("\n".join([str(p[0]) + "\t" + str(p[1]) for p in out_res]))
                 else:

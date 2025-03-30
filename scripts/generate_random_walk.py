@@ -50,7 +50,7 @@ import utils
 def convert_array_to_pair_list(walk_result):
     pairs = []
     for row in walk_result:
-        pairs.extend((row[0], item) for item in row[1:] if (row[0] != item))
+        pairs.extend((row[0], item) for item in row[1:] if row[0] != item)
     return pairs
 
 if __name__ == "__main__":

@@ -60,7 +60,7 @@ if __name__ == "__main__":
     parser.add_argument("--Gjson", type=str, help="The path of G.json file")
     parser.add_argument("--walk_length", type=int, help="Random walk length", default=5)
     parser.add_argument("--number_of_walks", type=int, help="Number of random walks per node", default=10)
-    parser.add_argument("--batch_size", type=int, help="Size of batch for each run", default=200000)
+    parser.add_argument("--batch_size", type=int, help="Size of batch for each run", default=2000)
     # parser.add_argument("--process", type=int, help="Number of processes to be used", default=-1)
     parser.add_argument("--output_folder", type=str, help="The path of output folder", default=os.path.join(ROOTPath, "data", "graphsage_input"))
     parser.add_argument("--outfile", type=str, help="Output random walk file prefix", default="data-walks")
@@ -102,13 +102,12 @@ if __name__ == "__main__":
             walk_result = np.array(G_nodes)[indexes]
             out_res = convert_array_to_pair_list(walk_result)
             
-            fp = open(os.path.join(args.output_folder, f'{args.outfile}-RW{args.number_of_walks}-WL{args.walk_length}.txt'), "a")
-            if i==0:
-                fp.write("\n".join([str(p[0]) + "\t" + str(p[1]) for p in out_res]))
-            else:
-                fp.write("\n")
-                fp.write("\n".join([str(p[0]) + "\t" + str(p[1]) for p in out_res]))
-            fp.close()
+            with open(os.path.join(args.output_folder, f'{args.outfile}-RW{args.number_of_walks}-WL{args.walk_length}.txt'), "a") as fp:
+                if i==0:
+                    fp.write("\n".join([str(p[0]) + "\t" + str(p[1]) for p in out_res]))
+                else:
+                    fp.write("\n")
+                    fp.write("\n".join([str(p[0]) + "\t" + str(p[1]) for p in out_res]))
     # ## run each batch in parallel
     # for i in range(len(batch)):
     #     if((i+1)<len(batch)):

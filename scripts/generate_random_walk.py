@@ -94,12 +94,14 @@ if __name__ == "__main__":
     logger.info(f'total batch: {len(batch)-1}')
     logger.info(f'number of walks:{args.number_of_walks}, walk length={args.walk_length}')
     for i in range(len(batch)):
-        if((i+1)<len(batch)):
+        if((i+1)<2):
             logger.info(f'Here is batch{i+1}')
             start = batch[i]
             end = batch[i+1]
             indexes = walker.random_walks(G, n_walks=args.number_of_walks, walk_len=args.walk_length, start_nodes=range(start, end))
+            print(indexes)
             walk_result = np.array(G_nodes)[indexes]
+            print(walk_result)
             out_res = convert_array_to_pair_list(walk_result)
             
             with open(os.path.join(args.output_folder, f'{args.outfile}-RW{args.number_of_walks}-WL{args.walk_length}.txt'), "a") as fp:

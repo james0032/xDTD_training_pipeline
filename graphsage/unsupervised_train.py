@@ -54,7 +54,7 @@ flags.DEFINE_integer('gpu', 1, "which gpu to use.")
 flags.DEFINE_integer('print_every', 50, "How often to print training info.")
 flags.DEFINE_integer('max_total_steps', 10**10, "Maximum total number of iterations")
 
-flags.DEFINE_integer('random_walk_version', '', "A postfix string to specify random walk version used for training")
+flags.DEFINE_string('random_walk_version', '', "A postfix string to specify random walk version used for training")
 os.environ["CUDA_VISIBLE_DEVICES"]=str(FLAGS.gpu)
 
 GPU_MEM_FRACTION = 0.8

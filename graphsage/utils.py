@@ -16,7 +16,7 @@ assert (major <= 1) and (minor <= 11), "networkx major version > 1.11"
 WALK_LEN=5
 N_WALKS=50
 
-def load_data(prefix, normalize=True, load_walks=False):
+def load_data(prefix, rw, normalize=True, load_walks=False):
     G_data = json.load(open(prefix + "-G.json"))
     G = json_graph.node_link_graph(G_data)
     if isinstance(G.nodes()[0], int):
@@ -68,7 +68,7 @@ def load_data(prefix, normalize=True, load_walks=False):
         feats = scaler.transform(feats)
     
     if load_walks:
-        with open(prefix + "-walks.txt") as fp:
+        with open(prefix + f"-walks{rw}.txt") as fp:
             for line in fp:
                 walks.append(map(conversion, line.split()))
 

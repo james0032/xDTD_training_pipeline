@@ -68,7 +68,7 @@ def load_data(prefix, rw, normalize=True, load_walks=False):
         feats = scaler.transform(feats)
     
     if load_walks:
-        with open(prefix + "-walks{rw:s}.txt".format(rw)) as fp:
+        with open(prefix + "-walks{rw:s}.txt".format(rw=rw)) as fp:
             for line in fp:
                 walks.append(map(conversion, line.split()))
 

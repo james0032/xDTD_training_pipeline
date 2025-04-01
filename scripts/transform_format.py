@@ -21,12 +21,13 @@ if __name__ == "__main__":
     parser.add_argument("--log_name", type=str, help="log file name", default="transform_format.log")
     parser.add_argument("--data_dir", type=str, help="The path of data folder", default=os.path.join(ROOTPath, "data"))
     parser.add_argument("--input", type=str, help="The full path of graphsage output folder")
+    parser.add_argument("--rw", type=str, help="The random walk and walk length tag to be used for path generation", default="")
     args = parser.parse_args()
 
     logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
     logger.info(args)
 
-    unsupervised_graphsage_vectors = np.load(os.path.join(args.input, 'val.npy'))
+    unsupervised_graphsage_vectors = np.load(os.path.join((args.input + args.rw), 'val.npy'))
     unsupervised_graphsage_ids = pd.read_csv(open(os.path.join(args.input, 'val.txt'),'r'), header=None).rename(columns={0:'id'})
     id_vec = pd.concat([unsupervised_graphsage_ids,pd.DataFrame(unsupervised_graphsage_vectors)],axis=1)
     id_vec = id_vec.sort_values(by='id').reset_index(drop=True)
@@ -38,7 +39,7 @@ if __name__ == "__main__":
     if not os.path.isdir(os.path.join(args.data_dir, 'graphsage_output')):
         os.mkdir(os.path.join(args.data_dir, 'graphsage_output'))
 
-    with open(os.path.join(args.data_dir,'graphsage_output','unsuprvised_graphsage_entity_embeddings.pkl'), 'wb') as outfile:
+    with open(os.path.join(args.data_dir,'graphsage_output','unsuprvised_graphsage_entity_embeddings{rw}.pkl'.format(rw=args.rw)), 'wb') as outfile:
         pickle.dump(unsupervised_graphsage_emb_dict,outfile)
 
 

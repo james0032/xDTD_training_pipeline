@@ -28,7 +28,7 @@ if __name__ == "__main__":
     logger.info(args)
 
     unsupervised_graphsage_vectors = np.load(os.path.join((args.input + args.rw), 'val.npy'))
-    unsupervised_graphsage_ids = pd.read_csv(open(os.path.join(args.input, 'val.txt'),'r'), header=None).rename(columns={0:'id'})
+    unsupervised_graphsage_ids = pd.read_csv(open(os.path.join((args.input + args.rw), 'val.txt'),'r'), header=None).rename(columns={0:'id'})
     id_vec = pd.concat([unsupervised_graphsage_ids,pd.DataFrame(unsupervised_graphsage_vectors)],axis=1)
     id_vec = id_vec.sort_values(by='id').reset_index(drop=True)
     id_vec_array = id_vec.iloc[:,1:].to_numpy()

@@ -50,7 +50,7 @@ import utils
 def convert_array_to_pair_list(walk_result):
     pairs = []
     for row in walk_result:
-        pairs.extend((row[0], item) for item in row[1:])
+        pairs.extend((row[0], item) for item in row[1:] if (row[0] != item))
     return pairs
 
 if __name__ == "__main__":
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     logger.info(f'total batch: {len(batch)-1}')
     logger.info(f'number of walks:{args.number_of_walks}, walk length={args.walk_length}')
     for i in range(len(batch)):
-        if((i+1)<2):
+        if((i+1)<=(len(batch))):
             logger.info(f'Here is batch{i+1}')
             start = batch[i]
             end = batch[i+1]

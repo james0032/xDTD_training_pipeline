@@ -99,13 +99,8 @@ if __name__ == "__main__":
             start = batch[i]
             end = batch[i+1]
             indexes = walker.random_walks(G, n_walks=args.number_of_walks, walk_len=args.walk_length, start_nodes=range(start, end))
-            print("indexes", list(indexes))
-            print(indexes.shape)
             walk_result = np.array(G_nodes)[indexes]
-            print("walk results:", list(walk_result))
-            print(walk_result.shape)
             out_res = convert_array_to_pair_list(walk_result)
-            print(out_res)
             with open(os.path.join(args.output_folder, f'{args.outfile}-RW{args.number_of_walks}-WL{args.walk_length}.txt'), "a") as fp:
                 if i==0:
                     fp.write("\n".join([str(p[0]) + "\t" + str(p[1]) for p in out_res]))

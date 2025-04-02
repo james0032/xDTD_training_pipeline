@@ -5,7 +5,7 @@ import os
 import time
 import tensorflow as tf
 import numpy as np
-
+import random
 from graphsage.models import SampleAndAggregate, SAGEInfo, Node2VecModel
 from graphsage.minibatch import EdgeMinibatchIterator
 from graphsage.neigh_samplers import UniformNeighborSampler
@@ -142,6 +142,7 @@ def train(train_data, test_data=None):
         features = np.vstack([features, np.zeros((features.shape[1],))])
 
     context_pairs = train_data[3] if FLAGS.random_context else None
+    random.shuffle(context_pairs)
     placeholders = construct_placeholders()
     minibatch = EdgeMinibatchIterator(G, 
             id_map,

@@ -141,7 +141,7 @@ def train(train_data, test_data=None):
         # pad with dummy zero vector
         features = np.vstack([features, np.zeros((features.shape[1],))])
 
-    context_pairs = random.suffle(train_data[3]) if FLAGS.random_context else None
+    context_pairs = random.shuffle(train_data[3]) if FLAGS.random_context else None
     placeholders = construct_placeholders()
     minibatch = EdgeMinibatchIterator(G, 
             id_map,

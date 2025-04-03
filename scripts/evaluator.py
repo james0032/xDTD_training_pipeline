@@ -219,7 +219,7 @@ def evaluate(model, X, y_true, calculate_metric=True):
         return [None, None, None, y_true, probas]
 
 
-def run_RF(emb_name, pklfile, tpstyle="stringent", tnstyle="stringent"):
+def run_RF(emb_name, pklfile, postfix, tpstyle="stringent", tnstyle="stringent"):
     # read labeled pairs
     print("Read dd pair file")
     dfori = pd.read_csv(f"{os.path.join(ddpath, 'data/Split/all_drug_disease_pairs_edges.tsv')}", sep='\t', header=0)
@@ -308,8 +308,8 @@ def run_RF(emb_name, pklfile, tpstyle="stringent", tnstyle="stringent"):
     
     dfrand.loc[:, "prob"] = fitModel.predict_proba(randX)[:,1]
     
-    dftrain.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}_dftrain.csv"))
-    dftest.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}_dftest.csv"))
+    dftrain.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}{postfix}_dftrain.csv"))
+    dftest.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}{postfix}_dftest.csv"))
     ### Also add dfrelax to fitModel.predict ####
     
     print("Get MRR nd hit@k")
@@ -333,17 +333,18 @@ def run_RF(emb_name, pklfile, tpstyle="stringent", tnstyle="stringent"):
     # dataframe dump
     dfallprob = pd.concat([dftrain, dftest], axis=0)
     dfallprob = dfallprob.reset_index(drop=True)
-    dfallprob.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}_dfallprob.csv"))
-    dfrand.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}_dfrandprob.csv"))
+    dfallprob.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}{postfix}_dfallprob.csv"))
+    dfrand.to_csv(os.path.join(ddpath, f"data/graphsage_output/{emb_name}{postfix}_dfrandprob.csv"))
     
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--emb_name", type=str, help="[graphsage|biobert]", required=True)
     parser.add_argument("--pickle_file_name", type=str, help="Embedding vectors in pickle format", required=True)
+    parser.add_argument("--addname", type=str, help="additional output file names for separate file saved", default="")
     args = parser.parse_args()
     
     #logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
     #logger.info(args)
     
-    run_RF(emb_name=args.emb_name, pklfile=args.pickle_file_name)
+    run_RF(emb_name=args.emb_name, pklfile=args.pickle_file_name, postfix=args.addname)

@@ -19,6 +19,7 @@ N_WALKS=50
 def load_data(prefix, rw, normalize=True, load_walks=False):
     G_data = json.load(open(prefix + "-G.json"))
     G = json_graph.node_link_graph(G_data)
+    print(prefix, rw)
     if isinstance(G.nodes()[0], int):
         conversion = lambda n : int(n)
     else:

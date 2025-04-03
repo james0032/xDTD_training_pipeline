@@ -221,6 +221,7 @@ def evaluate(model, X, y_true, calculate_metric=True):
 
 def run_RF(emb_name, pklfile, postfix, tpstyle="stringent", tnstyle="stringent"):
     # read labeled pairs
+    print(f"Input file is {pklfile}")
     print("Read dd pair file")
     dfori = pd.read_csv(f"{os.path.join(ddpath, 'data/Split/all_drug_disease_pairs_edges.tsv')}", sep='\t', header=0)
     print("Read embedding file")

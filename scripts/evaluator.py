@@ -272,7 +272,7 @@ def run_RF(emb_name, pklfile, postfix, tpstyle="stringent", tnstyle="stringent")
     dftrain = dftall[mask]
     dftest  = dftall[~mask]
     
-    model_name = f'RF_model_{emb_name}_{tpstyle}_{tnstyle}.pt'
+    model_name = f'RF_model_{emb_name}_{tpstyle}_{tnstyle}{postfix}.pt'
 
     if not os.path.exists(os.path.join(ddpath, model_name)):
         # RF model and grid setup

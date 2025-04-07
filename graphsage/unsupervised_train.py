@@ -53,7 +53,7 @@ flags.DEFINE_integer('validate_batch_size', 256, "how many nodes per validation 
 flags.DEFINE_integer('gpu', 1, "which gpu to use.")
 flags.DEFINE_integer('print_every', 50, "How often to print training info.")
 flags.DEFINE_integer('max_total_steps', 10**10, "Maximum total number of iterations")
-
+flags.DEFINE_boolean('load_walk', True, 'whether to use data-walks.txt as positive sampling')
 flags.DEFINE_string('random_walk_version', '', "A postfix string to specify random walk version used for training")
 os.environ["CUDA_VISIBLE_DEVICES"]=str(FLAGS.gpu)
 
@@ -380,7 +380,7 @@ def train(train_data, test_data=None):
 def main(argv=None):
     print("Loading training data..")
     print(FLAGS.train_prefix)
-    train_data = load_data(FLAGS.train_prefix, FLAGS.random_walk_version, normalize=False, load_walks=True)
+    train_data = load_data(FLAGS.train_prefix, FLAGS.random_walk_version, normalize=False, load_walks=FLAGS.load_walk)
     print("Done loading training data..")
     train(train_data)
 

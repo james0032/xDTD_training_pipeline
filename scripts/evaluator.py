@@ -277,7 +277,7 @@ def run_RF(emb_name, pklfile, postfix, tpstyle="stringent", tnstyle="stringent")
     if not os.path.exists(os.path.join(ddpath, model_name)):
         # RF model and grid setup
         print("model does not exist. New training model")
-        print("Random forest, grid search, crossvalidation=10")
+        print("Random forest, grid search, crossvalidation=5")
         RF_model = ensemble.RandomForestClassifier(class_weight='balanced', random_state=1023, max_features="sqrt", oob_score=True, n_jobs=-1)
         param_grid = { 'max_depth' : [depth for depth in range(20,21,5)],
                         'n_estimators': [2000],

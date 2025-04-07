@@ -150,8 +150,9 @@ def train(train_data, test_data=None):
             num_neg_samples=FLAGS.neg_sample_size,
             context_pairs = context_pairs)
     adj_info_ph = tf.placeholder(tf.int32, shape=minibatch.adj.shape)
-    adj_info = tf.Variable(adj_info_ph, trainable=False, name="adj_info")
-
+    adj_info = tf.Variable(tf.zeros_like(minibatch.adj), trainable=False, name="adj_info")
+    print(adj_info/ 1024 / 1024 / 1024, "GB")
+    print(minibatch.adj.shape, "the shape of minibatch.adj")
     if FLAGS.model == 'graphsage_mean':
         # Create model
         sampler = UniformNeighborSampler(adj_info)
@@ -247,7 +248,7 @@ def train(train_data, test_data=None):
     summary_writer = tf.summary.FileWriter(log_dir(), sess.graph)
      
     # Init variables
-    sess.run(tf.global_variables_initializer(), feed_dict={adj_info_ph: minibatch.adj})
+    sess.run(tf.global_variables_initializer())
     
     # Train model
     
@@ -258,8 +259,9 @@ def train(train_data, test_data=None):
     avg_time = 0.0
     epoch_val_costs = []
 
-    train_adj_info = tf.assign(adj_info, minibatch.adj)
+    train_adj_info = tf.assign(adj_info, adj_info_ph)
     val_adj_info = tf.assign(adj_info, minibatch.test_adj)
+    sess.run(train_adj_info, feed_dict={adj_info_ph: minibatch.adj})
     for epoch in range(FLAGS.epochs): 
         minibatch.shuffle() 
 
@@ -271,7 +273,6 @@ def train(train_data, test_data=None):
             # Construct feed dictionary
             feed_dict = minibatch.next_minibatch_feed_dict()
             feed_dict.update({placeholders['dropout']: FLAGS.dropout})
-
             t = time.time()
             # Training step
             outs = sess.run([merged, model.opt_op, model.loss, model.ranks, model.aff_all, 

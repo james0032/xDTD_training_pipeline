@@ -149,10 +149,11 @@ def train(train_data, test_data=None):
             max_degree=FLAGS.max_degree, 
             num_neg_samples=FLAGS.neg_sample_size,
             context_pairs = context_pairs)
+    print(minibatch.adj/ 1024 / 1024 / 1024, "GB")
+    print(minibatch.adj.shape, "the shape of minibatch.adj")
     adj_info_ph = tf.placeholder(tf.int32, shape=minibatch.adj.shape)
     adj_info = tf.Variable(tf.zeros_like(minibatch.adj), trainable=False, name="adj_info")
-    print(adj_info/ 1024 / 1024 / 1024, "GB")
-    print(minibatch.adj.shape, "the shape of minibatch.adj")
+    
     if FLAGS.model == 'graphsage_mean':
         # Create model
         sampler = UniformNeighborSampler(adj_info)

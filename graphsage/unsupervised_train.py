@@ -151,10 +151,11 @@ def train(train_data, test_data=None):
             context_pairs = context_pairs)
     print(minibatch.adj/ 1024 / 1024 / 1024, "GB")
     print(minibatch.adj.shape, "the shape of minibatch.adj")
-    adj_info_ph = tf.placeholder(tf.int32, shape=minibatch.adj.shape)
+    adj_shape = (int(minibatch.adj.shape[0]), int(minibatch.adj.shape[1]))
+    adj_info_ph = tf.placeholder(tf.int32, shape=adj_shape)
     adj_info = tf.get_variable(
     name="adj_info",
-    shape=minibatch.adj.shape,
+    shape=adj_shape,
     dtype=tf.int32,
     trainable=False,
     initializer=tf.zeros_initializer(),  # Placeholder, won’t be used

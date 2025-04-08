@@ -149,8 +149,9 @@ def train(train_data, test_data=None):
             max_degree=FLAGS.max_degree, 
             num_neg_samples=FLAGS.neg_sample_size,
             context_pairs = context_pairs)
-    print(minibatch.adj/ 1024 / 1024 / 1024, "GB")
+    
     print(minibatch.adj.shape, "the shape of minibatch.adj")
+    print(minibatch.test_adj.shape, "the shape of minibatch.test_adj")
     adj_shape = (int(minibatch.adj.shape[0]), int(minibatch.adj.shape[1]))
     adj_info_ph = tf.placeholder(tf.int32, shape=adj_shape)
     adj_info = tf.get_variable(

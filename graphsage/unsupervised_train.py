@@ -152,7 +152,13 @@ def train(train_data, test_data=None):
     print(minibatch.adj/ 1024 / 1024 / 1024, "GB")
     print(minibatch.adj.shape, "the shape of minibatch.adj")
     adj_info_ph = tf.placeholder(tf.int32, shape=minibatch.adj.shape)
-    adj_info = tf.Variable(tf.zeros_like(minibatch.adj), trainable=False, name="adj_info")
+    adj_info = tf.get_variable(
+    name="adj_info",
+    shape=minibatch.adj.shape,
+    dtype=tf.int32,
+    trainable=False,
+    initializer=tf.zeros_initializer(),  # Placeholder, won’t be used
+)
     
     if FLAGS.model == 'graphsage_mean':
         # Create model

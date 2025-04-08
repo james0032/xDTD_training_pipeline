@@ -267,8 +267,9 @@ def train(train_data, test_data=None):
     epoch_val_costs = []
 
     train_adj_info = tf.assign(adj_info, adj_info_ph)
-    val_adj_info = tf.assign(adj_info, minibatch.test_adj)
+    val_adj_info = tf.assign(adj_info, adj_info_ph)
     sess.run(train_adj_info, feed_dict={adj_info_ph: minibatch.adj})
+    sess.run(train_adj_info, feed_dict={adj_info_ph: minibatch.test_adj})
     for epoch in range(FLAGS.epochs): 
         minibatch.shuffle() 
 

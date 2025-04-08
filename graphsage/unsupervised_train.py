@@ -67,7 +67,7 @@ def log_dir():
             lr=FLAGS.learning_rate,
             rw=FLAGS.random_walk_version,
             sample1=FLAGS.samples_1,
-            sample2=FLAGS.sample_2
+            sample2=FLAGS.samples_2
             )
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)

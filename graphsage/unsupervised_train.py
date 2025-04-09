@@ -61,11 +61,13 @@ GPU_MEM_FRACTION = 0.8
 
 def log_dir():
     log_dir = FLAGS.base_log_dir + "/unsup-" + FLAGS.train_prefix.split("/")[-2]
-    log_dir += "/{model:s}_{model_size:s}_{lr:0.6f}_{rw:s}/".format(
+    log_dir += "/{model:s}_{model_size:s}_{lr:0.6f}_{rw:s}_{samples_1:d}_{samples_2:d}/".format(
             model=FLAGS.model,
             model_size=FLAGS.model_size,
             lr=FLAGS.learning_rate,
-            rw=FLAGS.random_walk_version
+            rw=FLAGS.random_walk_version,
+            sample1=FLAGS.samples_1,
+            sample2=FLAGS.samples_2
             )
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)

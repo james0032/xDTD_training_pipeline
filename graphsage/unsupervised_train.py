@@ -61,7 +61,7 @@ GPU_MEM_FRACTION = 0.8
 
 def log_dir():
     log_dir = FLAGS.base_log_dir + "/unsup-" + FLAGS.train_prefix.split("/")[-2]
-    log_dir += "/{model:s}_{model_size:s}_{lr:0.6f}_{s1:s}_{s2:s}/".format(
+    log_dir += "/{model:s}_{model_size:s}_{lr:0.6f}_{s1:d}_{s2:d}/".format(
             model=FLAGS.model,
             model_size=FLAGS.model_size,
             lr=FLAGS.learning_rate,

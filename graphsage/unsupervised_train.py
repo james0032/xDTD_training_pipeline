@@ -55,19 +55,21 @@ flags.DEFINE_integer('print_every', 50, "How often to print training info.")
 flags.DEFINE_integer('max_total_steps', 10**10, "Maximum total number of iterations")
 flags.DEFINE_boolean('load_walk', True, 'whether to use data-walks.txt as positive sampling')
 flags.DEFINE_string('random_walk_version', '', "A postfix string to specify random walk version used for training")
+flags.DEFINE_string('replicates', 'rep0', "Replicate output name")
 os.environ["CUDA_VISIBLE_DEVICES"]=str(FLAGS.gpu)
 
 GPU_MEM_FRACTION = 0.8
 
 def log_dir():
     log_dir = FLAGS.base_log_dir + "/unsup-" + FLAGS.train_prefix.split("/")[-2]
-    log_dir += "/{model:s}_{model_size:s}_{lr:0.6f}_{s1:d}_{s2:d}/".format(
+    log_dir += "/{model:s}_{model_size:s}_{lr:0.6f}_{s1:d}_{s2:d}_{rep:s}/".format(
             model=FLAGS.model,
             model_size=FLAGS.model_size,
             lr=FLAGS.learning_rate,
             #rw=FLAGS.random_walk_version,
             s1=FLAGS.samples_1,
-            s2=FLAGS.samples_2
+            s2=FLAGS.samples_2,
+            rep=FLAGS.replicates
             )
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)

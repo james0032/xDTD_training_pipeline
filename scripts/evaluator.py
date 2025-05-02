@@ -242,21 +242,8 @@ def run_RF(emb_name, pklfile, postfix, maskfile, tpstyle="stringent", tnstyle="s
     dftn = dfori[dfori['y']==0].drop_duplicates(subset=['subject', 'object']).reset_index(drop=True)[['subject', 'object', 'y']].rename(columns={'subject':'source', 'object':'target', 'y':'y'})
     print(f"TN has {dftn.shape[0]} DD pairs.")
     dftall = pd.concat([dftp, dftn], axis=0).reset_index(drop=True)
-    dftall = dftall[dftall['source'].isin(bioemd_dict.keys()) & dftall['target'].isin(bioemd_dict.keys())].reset_index(drop=True)
-    allX, ally = generate_Xy(bioemd_dict, dftall)
-    print("Read random pair files")
-    dfrand = pd.read_csv(f"{os.path.join(ddpath, 'data/random_pairs.txt')}", sep='\t', header=0)
-    dfrand = dfrand[dfrand['source'].isin(bioemd_dict.keys())].reset_index(drop=True)
-    dfrand = dfrand[dfrand['target'].isin(bioemd_dict.keys())].reset_index(drop=True)
-    print(f"{dfrand.shape[0]} random dd pairs.")
-    randX, randy = generate_Xy(bioemd_dict, dfrand)
     
-    ###### SPACE to generate relaxed TP samples for evaluating model later #####
-    
-    
-    # train test split
-    
-            
+    # train test split    
     if os.path.exists(maskfile):
         print(f"Pre-defined train/test split file used.")
         mask = np.load(maskfile)
@@ -270,14 +257,30 @@ def run_RF(emb_name, pklfile, postfix, maskfile, tpstyle="stringent", tnstyle="s
                 test_idx.append(i)
         mask = np.ones(ally.size, dtype=bool)
         mask[test_idx]=False
+    
+    dftall["is_train"] = mask
+    
+    dftall = dftall[dftall['source'].isin(bioemd_dict.keys()) & dftall['target'].isin(bioemd_dict.keys())].reset_index(drop=True)
+    allX, ally = generate_Xy(bioemd_dict, dftall)
+    print("Read random pair files")
+    dfrand = pd.read_csv(f"{os.path.join(ddpath, 'data/random_pairs.txt')}", sep='\t', header=0)
+    dfrand = dfrand[dfrand['source'].isin(bioemd_dict.keys())].reset_index(drop=True)
+    dfrand = dfrand[dfrand['target'].isin(bioemd_dict.keys())].reset_index(drop=True)
+    print(f"{dfrand.shape[0]} random dd pairs.")
+    randX, randy = generate_Xy(bioemd_dict, dfrand)
+    
+    ###### SPACE to generate relaxed TP samples for evaluating model later #####
+    
+    
+    
         
-    train_X = allX[mask]
-    train_y = ally[mask]
-    test_X  = allX[~mask]
-    test_y  = ally[~mask]
+    train_X = allX[dftall["is_train"]]
+    train_y = ally[dftall["is_train"]]
+    test_X  = allX[~dftall["is_train"]]
+    test_y  = ally[~dftall["is_train"]]
 
-    dftrain = dftall[mask]
-    dftest  = dftall[~mask]
+    dftrain = dftall[dftall["is_train"]]
+    dftest  = dftall[~dftall["is_train"]]
     
     model_name = f'RF_model_{emb_name}_{tpstyle}_{tnstyle}{postfix}.pt'
 

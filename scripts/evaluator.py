@@ -270,10 +270,11 @@ def run_RF(emb_name, pklfile, postfix, maskfile, tpstyle="stringent", tnstyle="s
                 test_idx.append(i)
         mask = np.ones(ally.size, dtype=bool)
         mask[test_idx]=False
+        
     train_X = allX[mask]
     train_y = ally[mask]
-    test_X  = allX[test_idx]
-    test_y  = ally[test_idx]
+    test_X  = allX[~mask]
+    test_y  = ally[~mask]
 
     dftrain = dftall[mask]
     dftest  = dftall[~mask]

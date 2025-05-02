@@ -219,7 +219,7 @@ def evaluate(model, X, y_true, calculate_metric=True):
         return [None, None, None, y_true, probas]
 
 
-def run_RF(emb_name, pklfile, postfix, tpstyle="stringent", tnstyle="stringent"):
+def run_RF(emb_name, pklfile, postfix, maskfile, tpstyle="stringent", tnstyle="stringent"):
     # read labeled pairs
     print(f"Input file is {pklfile}")
     print("Read dd pair file")
@@ -255,15 +255,21 @@ def run_RF(emb_name, pklfile, postfix, tpstyle="stringent", tnstyle="stringent")
     
     
     # train test split
-    frac = 0.9
-    print(f"train/test split ratio is {frac}/{(1-frac)}")
-    test_idx = []
-    for i in range(len(ally)):
-        r = random.random()
-        if r > frac:
-            test_idx.append(i)
-    mask = np.ones(ally.size, dtype=bool)
-    mask[test_idx]=False
+    
+            
+    if os.path.exists(maskfile):
+        print(f"Pre-defined train/test split file used.")
+        mask = np.load(maskfile)
+    else:
+        frac = 0.9
+        print(f"train/test split ratio is {frac}/{(1-frac)}")
+        test_idx = []
+        for i in range(len(ally)):
+            r = random.random()
+            if r > frac:
+                test_idx.append(i)
+        mask = np.ones(ally.size, dtype=bool)
+        mask[test_idx]=False
     train_X = allX[mask]
     train_y = ally[mask]
     test_X  = allX[test_idx]
@@ -343,9 +349,10 @@ if __name__ == "__main__":
     parser.add_argument("--emb_name", type=str, help="[graphsage|biobert]", required=True)
     parser.add_argument("--pickle_file_name", type=str, help="Embedding vectors in pickle format", required=True)
     parser.add_argument("--addname", type=str, help="additional output file names for separate file saved", default="")
+    parser.add_argument("--maskfile", type=str, help="Assign train/test split mask. If not assigned, new random split will be used.", default="")
     args = parser.parse_args()
     
     #logger = utils.get_logger(os.path.join(args.log_dir,args.log_name))
     #logger.info(args)
     
-    run_RF(emb_name=args.emb_name, pklfile=args.pickle_file_name, postfix=args.addname)
+    run_RF(emb_name=args.emb_name, pklfile=args.pickle_file_name, postfix=args.addname, maskfile=args.maskfile)

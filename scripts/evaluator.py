@@ -249,13 +249,14 @@ def run_RF(emb_name, pklfile, postfix, maskfile, tpstyle="stringent", tnstyle="s
         mask = np.load(maskfile)
     else:
         frac = 0.9
+        rows = dftall.shape[0]
         print(f"train/test split ratio is {frac}/{(1-frac)}")
         test_idx = []
-        for i in range(len(ally)):
+        for i in range(rows):
             r = random.random()
             if r > frac:
                 test_idx.append(i)
-        mask = np.ones(ally.size, dtype=bool)
+        mask = np.ones(rows, dtype=bool)
         mask[test_idx]=False
     
     dftall["is_train"] = mask
